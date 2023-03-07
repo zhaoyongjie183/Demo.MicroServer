@@ -1,0 +1,19 @@
+﻿################################################################################
+# 此 .gitignore 文件已由 Microsoft(R) Visual Studio 自动创建。
+################################################################################
+
+/Demo.MicroService.Project/Demo.MicroService.AuthenticationCenter/obj
+/Demo.MicroService.Project/Demo.MicroService.BusinessDomain/bin/Debug/net7.0
+/Demo.MicroService.Project/Demo.MicroService.BusinessDomain/obj
+/Demo.MicroService.Project/Demo.MicroService.BusinessModel/bin/Debug/net7.0
+/Demo.MicroService.Project/Demo.MicroService.BusinessModel/obj
+/Demo.MicroService.Project/Demo.MicroService.Core/bin/Debug/net7.0
+/Demo.MicroService.Project/Demo.MicroService.Core/obj
+/Demo.MicroService.Project/Demo.MicroService.CustomerMicroService/bin/Debug/net7.0
+/Demo.MicroService.Project/Demo.MicroService.CustomerMicroService/obj
+/Demo.MicroService.Project/Demo.MicroService.GatewayCenter/bin/Debug/net7.0
+/Demo.MicroService.Project/Demo.MicroService.GatewayCenter/obj
+/Demo.MicroService.Project/Demo.MicroService.ProjectMicroService/bin/Debug/net7.0
+/Demo.MicroService.Project/Demo.MicroService.ProjectMicroService/obj
+/Demo.MicroService.Project/Demo.MicroService.UserMicroservice/bin/Debug/net7.0
+/Demo.MicroService.Project/Demo.MicroService.UserMicroservice/obj
