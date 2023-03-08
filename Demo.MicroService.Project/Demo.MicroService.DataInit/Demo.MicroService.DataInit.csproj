@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <OutputType>Exe</OutputType>
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
@@ -8,11 +9,6 @@
 
   <ItemGroup>
     <PackageReference Include="SqlSugarCore" Version="5.1.3.57" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Demo.MicroService.Core\Demo.MicroService.Core.csproj" />
-    <ProjectReference Include="..\Demo.MicroService.Repository\Demo.MicroService.Repository.csproj" />
   </ItemGroup>
 
 </Project>
