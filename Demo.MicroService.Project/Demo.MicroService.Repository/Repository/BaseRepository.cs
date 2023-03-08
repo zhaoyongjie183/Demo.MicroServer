@@ -5,6 +5,8 @@ using System.Data;
 using System.Dynamic;
 using System.Linq.Expressions;
 using Demo.MicroService.Core.Utils;
+using Nacos.V2;
+using Nacos.V2.Config;
 
 /**
 *┌──────────────────────────────────────────────────────────────┐
@@ -27,7 +29,33 @@ namespace Demo.MicroService.Repository.Repository
         public BaseRepository(SqlSugarClient dbContext)
         {
             _db = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+            //_db = new SqlSugarClient(new ConnectionConfig()
+            //{
+            //    ConnectionString = Config.ConnectionString,
+            //    DbType = DbType.SqlServer,
+            //    IsAutoCloseConnection = true,
+            //    InitKeyType = InitKeyType.Attribute,
+            //    AopEvents = new AopEvents()
+            //    {
+            //        OnLogExecuting = (sql, p) =>
+            //        {
+            //            Console.WriteLine(sql);
+            //        }
+            //    }
+            //});
         }
+
+        //public virtual ConnectionConfig ConnectionString()
+        //{
+        //    var content = nacosConfigService.GetConfig(NacosConfig.DefaultConnection, NacosConfig.DefaultGroupName, 5000).Result;
+        //    ConnectionConfig connection = new ConnectionConfig()
+        //    {
+        //        ConnectionString = "Data Source=192.168.1.6;Initial Catalog=DemoMicroService;User ID=cdms_admin;Password=fZ`glh_m",
+        //        DbType = SqlSugar.DbType.SqlServer,
+        //        IsAutoCloseConnection = true
+        //    };
+        //    return connection;
+        //}
 
         #region add
 

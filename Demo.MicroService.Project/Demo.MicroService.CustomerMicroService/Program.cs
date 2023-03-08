@@ -5,12 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 #region Nacos配置
 // 注册服务到Nacos
 builder.Services.AddNacosAspNet(builder.Configuration); //默认节点Nacos
-// 添加配置中心
-builder.Host.ConfigureAppConfiguration((context, builder) =>
-{
-    var config = builder.Build();
-    builder.AddNacosV2Configuration(config.GetSection("NacosConfig"));
-});
+
 #endregion
 
 // Add services to the container.

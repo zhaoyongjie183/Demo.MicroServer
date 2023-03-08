@@ -46,6 +46,6 @@ namespace Demo.MicroService.Core.Model
         /// <summary>
         /// 泛型数据
         /// </summary>
-        public T TValue { get; set; }
+        public T? DataResult { get; set; }
     }
 }
