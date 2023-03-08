@@ -17,3 +17,7 @@
 /Demo.MicroService.Project/Demo.MicroService.ProjectMicroService/obj
 /Demo.MicroService.Project/Demo.MicroService.UserMicroservice/bin/Debug/net7.0
 /Demo.MicroService.Project/Demo.MicroService.UserMicroservice/obj
+/Demo.MicroService.Project/Demo.MicroService.DataInit/bin/Debug/net7.0
+/Demo.MicroService.Project/Demo.MicroService.DataInit/obj
+/Demo.MicroService.Project/Demo.MicroService.Repository/bin/Debug/net7.0
+/Demo.MicroService.Project/Demo.MicroService.Repository/obj
