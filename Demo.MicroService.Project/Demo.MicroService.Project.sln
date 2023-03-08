@@ -31,6 +31,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataInit", "DataInit", "{C4
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.MicroService.DataInit", "Demo.MicroService.DataInit\Demo.MicroService.DataInit.csproj", "{C41DC3BD-2081-4C4E-9BA3-76471C866EC1}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.MicroService.AuthenticationCenter", "Demo.MicroService.AuthenticationCenter\Demo.MicroService.AuthenticationCenter.csproj", "{C6C8AFC5-6003-4022-8E7D-A7ED8E5FDAAE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,10 @@ Global
 		{C41DC3BD-2081-4C4E-9BA3-76471C866EC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C41DC3BD-2081-4C4E-9BA3-76471C866EC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C41DC3BD-2081-4C4E-9BA3-76471C866EC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6C8AFC5-6003-4022-8E7D-A7ED8E5FDAAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6C8AFC5-6003-4022-8E7D-A7ED8E5FDAAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6C8AFC5-6003-4022-8E7D-A7ED8E5FDAAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6C8AFC5-6003-4022-8E7D-A7ED8E5FDAAE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -87,6 +93,7 @@ Global
 		{278082BD-60FB-41BA-80B6-AA244C5E025D} = {6A4DD617-C444-413A-B7A0-5F3250F6E7CF}
 		{CAB511CD-2FF0-42C6-9374-76E84EBA77D7} = {F54C7934-C2E1-415F-BE5E-369CB34B82D3}
 		{C41DC3BD-2081-4C4E-9BA3-76471C866EC1} = {C400CB02-EBF2-4D85-8098-B84883F528BF}
+		{C6C8AFC5-6003-4022-8E7D-A7ED8E5FDAAE} = {6A4DD617-C444-413A-B7A0-5F3250F6E7CF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B6950459-3AC9-4DFD-8D69-CEC1013D2EAA}
