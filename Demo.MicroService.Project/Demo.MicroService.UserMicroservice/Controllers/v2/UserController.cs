@@ -4,8 +4,9 @@ using Demo.MicroService.Core.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Demo.MicroService.UserMicroservice.Controllers
+namespace Demo.MicroService.UserMicroservice.Controllers.v2
 {
+    [ApiVersion("2")]
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -15,8 +16,8 @@ namespace Demo.MicroService.UserMicroservice.Controllers
 
         public UserController(ITSysUserService tSysUserService, ILogger<UserController> logger)
         {
-            this._tSysUserService = tSysUserService;
-            this._logger = logger;
+            _tSysUserService = tSysUserService;
+            _logger = logger;
         }
 
         [HttpPost]
