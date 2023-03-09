@@ -6,9 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Demo.MicroService.UserMicroservice.Controllers.v1
 {
-    [ApiVersion("1", Deprecated = true)]
-    [Route("api/[controller]/[action]")]
+  
+    [ApiVersion("1",Deprecated = true)]
     [ApiController]
+    [Route("api/[controller]/[action]")]
     public class UserController : ControllerBase
     {
         private readonly ITSysUserService _tSysUserService;

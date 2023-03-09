@@ -1,4 +1,5 @@
-﻿using Microsoft.OpenApi.Any;
+﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -24,7 +25,7 @@ namespace Demo.MicroService.Core.Infrastructure.Swagger
             var apiDescription = context.ApiDescription;
 
             //判断接口遗弃状态，对接口进行标记调整
-            //operation.Deprecated |= apiDescription.();
+            operation.Deprecated |= apiDescription.IsDeprecated();
 
             if (operation.Parameters == null)
             {
