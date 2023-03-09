@@ -5,8 +5,6 @@ using System.Data;
 using System.Dynamic;
 using System.Linq.Expressions;
 using Demo.MicroService.Core.Utils;
-using Nacos.V2;
-using Nacos.V2.Config;
 
 /**
 *┌──────────────────────────────────────────────────────────────┐
