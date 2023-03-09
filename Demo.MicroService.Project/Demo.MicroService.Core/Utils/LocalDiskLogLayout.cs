@@ -1,12 +1,9 @@
-﻿using log4net.Core;
+﻿using Demo.MicroService.Core.Model;
+using log4net.Core;
 using log4net.Layout;
 using log4net.Util;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Net;
 
 /**
 *┌──────────────────────────────────────────────────────────────┐
@@ -20,7 +17,7 @@ using System.Threading.Tasks;
 *│　类    名： LocalDiskLogLayout                                      
 *└──────────────────────────────────────────────────────────────┘
 */
-namespace Demo.MicroService.Core.Utils
+namespace Demo.MicroService.Core
 {
     public class LocalDiskLogLayout : PatternLayout
     {
@@ -72,9 +69,11 @@ namespace Demo.MicroService.Core.Utils
 
         public override void Format(TextWriter writer, LoggingEvent loggingEvent)
         {
-            var json = JsonConvert.SerializeObject(loggingEvent);
+            var log4NetModel = GetLog4NetLog(loggingEvent);
 
-            writer.WriteLine(json);
+            var message = JsonConvert.SerializeObject(log4NetModel);
+
+            writer.Write(message);
         }
 
         #region Override implementation of LayoutSkeleton
@@ -135,5 +134,34 @@ namespace Demo.MicroService.Core.Utils
             }
         }       /* property DynamicPatternLayout Footer */
         #endregion
+
+        /// <summary>
+        /// LoggingEvent to KafkaLog
+        /// </summary>
+        /// <param name="loggingEvent"></param>
+        /// <returns></returns>
+        private Log4NetModel GetLog4NetLog(LoggingEvent loggingEvent)
+        {
+            var obj = new Log4NetModel
+            {
+                LogTimestamp = Convert.ToInt64((DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1, 0, 0, 0, 0)).TotalMilliseconds),
+                AppId = AppId,
+                HostName = Dns.GetHostName(),
+                Level = loggingEvent.Level.ToString(),
+                LoggerName = loggingEvent.LoggerName,
+                Message = loggingEvent.RenderedMessage
+            };
+
+            if (loggingEvent.ExceptionObject != null)
+            {
+                obj.Exception = new KafkaLogException
+                {
+                    Name = loggingEvent.ExceptionObject.GetType().ToString(),
+                    Message = loggingEvent.ExceptionObject.Message,
+                    StackTrace = loggingEvent.ExceptionObject.StackTrace
+                };
+            }
+            return obj;
+        }
     }
 }

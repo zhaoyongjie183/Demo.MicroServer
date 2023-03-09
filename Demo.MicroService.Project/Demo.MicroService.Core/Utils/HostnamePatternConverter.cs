@@ -1,9 +1,4 @@
 ﻿using log4net.Util;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 /**
 *┌──────────────────────────────────────────────────────────────┐
@@ -17,13 +12,13 @@ using System.Threading.Tasks;
 *│　类    名： HostnamePatternConverter                                      
 *└──────────────────────────────────────────────────────────────┘
 */
-namespace Demo.MicroService.Core.Utils
+namespace Demo.MicroService.Core
 {
     public class HostnamePatternConverter : PatternConverter
     {
         protected override async void Convert(TextWriter writer, object state)
         {
-            await writer.WriteAsync(state.ToString());
+            await writer.WriteAsync("zyj");
         }
     }
 }

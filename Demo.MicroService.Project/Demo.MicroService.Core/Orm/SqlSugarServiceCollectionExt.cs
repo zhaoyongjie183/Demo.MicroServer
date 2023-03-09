@@ -2,11 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SqlSugar;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 /**
 *┌──────────────────────────────────────────────────────────────┐
@@ -75,7 +70,7 @@ namespace Demo.MicroService.Core.Orm
                             }
                         };
                         configAction.Invoke(config);
-                        var log = serviceProvider.GetRequiredService<ILogger>();
+                        var log = serviceProvider.GetRequiredService<ILogger<T>>();
                         var db = new SqlSugarClient(config)
                        ;
                         var configuration = serviceProvider.GetRequiredService<IConfiguration>();
@@ -133,7 +128,7 @@ namespace Demo.MicroService.Core.Orm
                         };
                         configAction.Invoke(configS);
                         var db = new SqlSugarClient(configS);
-                        var log = serviceProvider.GetRequiredService<ILogger>();
+                        var log = serviceProvider.GetRequiredService<ILogger<T>>();
                         var configuration = serviceProvider.GetRequiredService<IConfiguration>();
                         string flag = configuration["Log:sqllog"];
                         if (string.IsNullOrWhiteSpace(flag))
@@ -188,7 +183,7 @@ namespace Demo.MicroService.Core.Orm
                         };
                         configAction.Invoke(configT);
                         var db = new SqlSugarClient(configT);
-                        var log = serviceProvider.GetRequiredService<ILogger>();
+                        var log = serviceProvider.GetRequiredService<ILogger<T>>();
                         var configuration = serviceProvider.GetRequiredService<IConfiguration>();
                         string flag = configuration["Log:sqllog"];
                         if (string.IsNullOrWhiteSpace(flag))
@@ -244,7 +239,7 @@ namespace Demo.MicroService.Core.Orm
             };
             configAction.Invoke(configT);
             var db = new SqlSugarClient(configT);
-            var log = serviceProvider.GetRequiredService<ILogger>();
+            var log = serviceProvider.GetRequiredService<ILogger<TService>>();
             var configuration = serviceProvider.GetRequiredService<IConfiguration>();
             string flag = configuration["Log:sqllog"];
             if (string.IsNullOrWhiteSpace(flag))

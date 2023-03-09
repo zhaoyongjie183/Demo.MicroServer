@@ -6,17 +6,16 @@ using Demo.MicroService.Core.Orm;
 using Demo.MicroService.Repository.IRepository;
 using Demo.MicroService.Repository.Repository;
 using Nacos.AspNetCore.V2;
-using Nacos.V2;
-using Nacos.V2.DependencyInjection;
 using SqlSugar;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
+builder.Logging.AddLog4Net();
 #region Nacos配置
 // 注册服务到Nacos
-builder.Services.AddNacosAspNet(builder.Configuration); //默认节点Nacos
-builder.Host.UseNacosConfig(section: "NacosConfig");
+builder.Services.AddNacosAspNet(builder.Configuration, section: "NacosConfig"); //默认节点Nacos
+//builder.Host.UseNacosConfig(section: "NacosConfig");
+builder.Configuration.AddNacosV2Configuration(builder.Configuration.GetSection("NacosConfig"));
 #endregion
 
 builder.Services.AddControllers();
@@ -37,8 +36,6 @@ builder.Services.AddSqlSugarClient<SqlSugarClient>(config =>
     //config.IsShardSameThread = true;
 });
 #endregion
-
-builder.Logging.AddLog4Net();
 
 ApplicationManager.RegisterAssembly(builder.Services, "Demo.MicroService.BusinessDomain");
 ApplicationManager.RegisterAssembly(builder.Services, "Demo.MicroService.Repository");

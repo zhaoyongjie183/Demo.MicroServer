@@ -11,16 +11,19 @@ namespace Demo.MicroService.UserMicroservice.Controllers
     public class UserController : ControllerBase
     {
         private readonly ITSysUserService _tSysUserService;
+        private readonly ILogger<UserController> _logger;
 
-        public UserController(ITSysUserService tSysUserService)
+        public UserController(ITSysUserService tSysUserService, ILogger<UserController> logger)
         {
             this._tSysUserService = tSysUserService;
+            this._logger = logger;
         }
 
         [HttpPost]
         public async Task<JsonResult> AddOrUpdate([FromBody] TSysUser sysUser)
         {
-            _tSysUserService.Insert(sysUser);
+            _logger.LogInformation("sdsdsds");
+            //_tSysUserService.Insert(sysUser);
             JsonResult result = new JsonResult(new ResponseResult<TSysUser>() { DataResult = sysUser, IsSuccess = true, Message = "新增成功" });
             return result;
         }
