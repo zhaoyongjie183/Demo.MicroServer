@@ -7,6 +7,7 @@ using Demo.MicroService.Repository.IRepository;
 using Demo.MicroService.Repository.Repository;
 using Nacos.AspNetCore.V2;
 using SqlSugar;
+using Demo.MicroService.Core.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,6 +52,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 
 }
+app.UseExceptionHandlerMiddleware();
 
 app.UseHttpsRedirection();
 
