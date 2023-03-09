@@ -18,15 +18,16 @@ using System.Threading.Tasks;
 */
 namespace Demo.MicroService.Core.Orm
 {
-    public class SqlConnectionModel
+    public class SqlConnectionOptionsModel
     {
+        public const string SqlSugar = "SqlSugar";
         /// <summary>
         /// 数据库类型
         /// </summary>
         public string DbType { get; set; }
 
         /// <summary>
-        /// 
+        /// 数据库链接
         /// </summary>
         public string SqlConnectionString { get; set; }
     }

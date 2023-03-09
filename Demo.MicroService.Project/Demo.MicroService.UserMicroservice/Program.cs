@@ -16,14 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 #region Nacos配置
 // 注册服务到Nacos
 builder.Services.AddNacosAspNet(builder.Configuration); //默认节点Nacos
-builder.Services.AddNacosV2Config(x =>
-{
-    x.ServerAddresses = new System.Collections.Generic.List<string> { "http://192.168.1.9:8848/" };
-    x.EndPoint = "";
-    x.Namespace = "Demo.MicroService";
-    x.UserName = "nacos";
-    x.Password = "nacos";
-});
+builder.Host.UseNacosConfig(section: "NacosConfig");
 #endregion
 
 builder.Services.AddControllers();
@@ -34,7 +27,7 @@ builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 builder.Services.AddScoped(typeof(IBaseServices<>), typeof(BaseServices<>));
 
 #region Orm
-var sqlSugarConfig = SqlSugarConfig.GetConnectionString(builder.Services.BuildServiceProvider().GetService<INacosConfigService>());
+var sqlSugarConfig = SqlSugarConfig.GetConnectionString(builder.Configuration);
 builder.Services.AddSqlSugarClient<SqlSugarClient>(config =>
 {
     config.ConnectionString = sqlSugarConfig.Item2;
@@ -44,6 +37,7 @@ builder.Services.AddSqlSugarClient<SqlSugarClient>(config =>
     //config.IsShardSameThread = true;
 });
 #endregion
+
 builder.Logging.AddLog4Net();
 
 ApplicationManager.RegisterAssembly(builder.Services, "Demo.MicroService.BusinessDomain");

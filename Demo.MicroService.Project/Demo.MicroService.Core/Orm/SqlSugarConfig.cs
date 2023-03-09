@@ -61,33 +61,33 @@ namespace Demo.MicroService.Core.Orm
         /// </summary>
         /// <param name="configuration">IConfiguration</param>
         /// <returns></returns>
-        public static (DbType, string) GetConnectionString(INacosConfigService nacosConfigService)
+        public static (DbType, string) GetConnectionString(IConfiguration nacosConfigService)
         {
-            var content = nacosConfigService.GetConfig(NacosConfig.DefaultConnection, NacosConfig.DefaultGroupName, 5000).Result;
-            if (string.IsNullOrEmpty(content))
+            var sqlConnectionOptions = new SqlConnectionOptionsModel();
+            nacosConfigService.GetSection(SqlConnectionOptionsModel.SqlSugar).Bind(sqlConnectionOptions);
+            if (sqlConnectionOptions.IsNullT())
                 throw new Exception("配置不能为空");
-            var sqlConnectModel=JsonConvert.DeserializeObject<SqlConnectionModel>(content);
-            string type = sqlConnectModel.DbType;
+            string type = sqlConnectionOptions.DbType;
             var dbType = type.ToEnum<DbType>();
             switch (dbType)
             {
                 case DbType.MySql:
-                    return (DbType.MySql, sqlConnectModel.SqlConnectionString);
+                    return (DbType.MySql, sqlConnectionOptions.SqlConnectionString);
 
                 case DbType.SqlServer:
-                    return (DbType.SqlServer, sqlConnectModel.SqlConnectionString);
+                    return (DbType.SqlServer, sqlConnectionOptions.SqlConnectionString);
 
                 case DbType.Sqlite:
-                    return (DbType.Sqlite, sqlConnectModel.SqlConnectionString);
+                    return (DbType.Sqlite, sqlConnectionOptions.SqlConnectionString);
 
                 case DbType.Oracle:
-                    return (DbType.Oracle, sqlConnectModel.SqlConnectionString);
+                    return (DbType.Oracle, sqlConnectionOptions.SqlConnectionString);
 
                 case DbType.PostgreSQL:
-                    return (DbType.PostgreSQL, sqlConnectModel.SqlConnectionString);
+                    return (DbType.PostgreSQL, sqlConnectionOptions.SqlConnectionString);
 
                 default:
-                    return (DbType.SqlServer, sqlConnectModel.SqlConnectionString);
+                    return (DbType.SqlServer, sqlConnectionOptions.SqlConnectionString);
             }
         }
 

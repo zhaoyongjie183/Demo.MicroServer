@@ -21,7 +21,7 @@ namespace Demo.MicroService.Core.Model
     public static class NacosConfig
     {
         public const string DefaultGroupName = "DEFAULT_GROUP";
-        public const string DefaultConnection = "DefaultConnection";
+        public const string SqlSugar = "SqlSugar";
 
     }
 }
