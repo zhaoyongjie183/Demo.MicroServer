@@ -5,8 +5,6 @@ using System.Data;
 using System.Dynamic;
 using System.Linq.Expressions;
 using Demo.MicroService.Core.Utils;
-using Microsoft.AspNetCore.DataProtection.KeyManagement;
-using System.Reflection;
 
 /**
 *┌──────────────────────────────────────────────────────────────┐

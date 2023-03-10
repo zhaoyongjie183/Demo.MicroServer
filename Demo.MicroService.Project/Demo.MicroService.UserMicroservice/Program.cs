@@ -12,6 +12,7 @@ using Demo.MicroService.Core.Infrastructure.Swagger;
 using Demo.MicroService.Repository.IRepository.ITenantRepository;
 using Demo.MicroService.Repository.Repository.TenantRepository;
 using Demo.MicroService.Core.HttpApiExtend;
+using Demo.MicroService.Core.ConsulExtend;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,6 +50,10 @@ builder.Services.AddHttpInvoker(options =>
 });
 #endregion
 
+#region consul
+builder.Services.AddConsulRegister(builder.Configuration);
+#endregion
+
 builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 builder.Services.AddScoped(typeof(ITenantBaseRepository<>), typeof(TenantBaseRepository<>));
 builder.Services.AddScoped(typeof(IBaseServices), typeof(BaseServices));
@@ -78,6 +83,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerExt();
     #endregion
 }
+
+#region Consul×¢²á
+app.UseHealthCheckMiddleware("/Api/Health/Index");//ÐÄÌøÇëÇóÏìÓ¦
+app.Services.GetService<IConsulRegister>()!.UseConsulRegist();
+#endregion
 app.UseExceptionHandlerMiddleware();
 
 app.UseHttpsRedirection();

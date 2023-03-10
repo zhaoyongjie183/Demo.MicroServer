@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-/**
+﻿/**
 *┌──────────────────────────────────────────────────────────────┐
 *│　描    述：                                                    
 *│　作    者：赵永杰                                             

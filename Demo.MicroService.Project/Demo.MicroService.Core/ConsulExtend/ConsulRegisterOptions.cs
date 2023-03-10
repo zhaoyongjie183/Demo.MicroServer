@@ -14,6 +14,7 @@ namespace Demo.MicroService.Core.ConsulExtend
 {
     public class ConsulRegisterOptions
     {
+        public const string ConsulRegisterOption = "ConsulRegisterOptions";
         /// <summary>
         /// 服务自身IP
         /// </summary>
