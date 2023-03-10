@@ -388,5 +388,145 @@ namespace Demo.MicroService.Repository.Repository
             var result = (_db.Ado.UseStoredProcedure().GetDataTable(procedureName, parameters), parameters);
             return result;
         }
+
+        #region Async Method
+        public virtual Task<T> GetByIdAsync(dynamic id)
+        {
+            return _db.Queryable<T>().InSingleAsync(id);
+        }
+        public virtual Task<List<T>> GetListAsync()
+        {
+            return _db.Queryable<T>().ToListAsync();
+        }
+
+        public virtual Task<List<T>> GetListAsync(Expression<Func<T, bool>> whereExpression)
+        {
+            return _db.Queryable<T>().Where(whereExpression).ToListAsync();
+        }
+        public virtual Task<T> GetSingleAsync(Expression<Func<T, bool>> whereExpression)
+        {
+            return _db.Queryable<T>().SingleAsync(whereExpression);
+        }
+        public virtual Task<T> GetFirstAsync(Expression<Func<T, bool>> whereExpression)
+        {
+            return _db.Queryable<T>().FirstAsync(whereExpression);
+        }
+        public virtual async Task<List<T>> GetPageListAsync(Expression<Func<T, bool>> whereExpression, PageModel page)
+        {
+            RefAsync<int> count = 0;
+            var result = await _db.Queryable<T>().Where(whereExpression).ToPageListAsync(page.PageIndex, page.PageSize, count);
+            page.TotalCount = count;
+            return result;
+        }
+        public virtual async Task<List<T>> GetPageListAsync(Expression<Func<T, bool>> whereExpression, PageModel page, Expression<Func<T, object>> orderByExpression = null, OrderByType orderByType = OrderByType.Asc)
+        {
+            RefAsync<int> count = 0;
+            var result = await _db.Queryable<T>().OrderByIF(orderByExpression != null, orderByExpression, orderByType).Where(whereExpression).ToPageListAsync(page.PageIndex, page.PageSize, count);
+            page.TotalCount = count;
+            return result;
+        }
+        public virtual async Task<List<T>> GetPageListAsync(List<IConditionalModel> conditionalList, PageModel page)
+        {
+            RefAsync<int> count = 0;
+            var result = await _db.Queryable<T>().Where(conditionalList).ToPageListAsync(page.PageIndex, page.PageSize, count);
+            page.TotalCount = count;
+            return result;
+        }
+        public virtual async Task<List<T>> GetPageListAsync(List<IConditionalModel> conditionalList, PageModel page, Expression<Func<T, object>> orderByExpression = null, OrderByType orderByType = OrderByType.Asc)
+        {
+            RefAsync<int> count = 0;
+            var result = await _db.Queryable<T>().OrderByIF(orderByExpression != null, orderByExpression, orderByType).Where(conditionalList).ToPageListAsync(page.PageIndex, page.PageSize, count);
+            page.TotalCount = count;
+            return result;
+        }
+        public virtual Task<bool> IsAnyAsync(Expression<Func<T, bool>> whereExpression)
+        {
+            return _db.Queryable<T>().Where(whereExpression).AnyAsync();
+        }
+        public virtual Task<int> CountAsync(Expression<Func<T, bool>> whereExpression)
+        {
+
+            return _db.Queryable<T>().Where(whereExpression).CountAsync();
+        }
+
+        public virtual async Task<bool> InsertOrUpdateAsync(T data)
+        {
+            return await this._db.Storageable(data).ExecuteCommandAsync() > 0;
+        }
+        public virtual async Task<bool> InsertOrUpdateAsync(List<T> datas)
+        {
+            return await this._db.Storageable(datas).ExecuteCommandAsync() > 0;
+        }
+        public virtual async Task<bool> InsertAsync(T insertObj)
+        {
+            return await this._db.Insertable(insertObj).ExecuteCommandAsync() > 0;
+        }
+        public virtual Task<int> InsertReturnIdentityAsync(T insertObj)
+        {
+            return this._db.Insertable(insertObj).ExecuteReturnIdentityAsync();
+        }
+        public virtual Task<long> InsertReturnBigIdentityAsync(T insertObj)
+        {
+            return this._db.Insertable(insertObj).ExecuteReturnBigIdentityAsync();
+        }
+     
+        public virtual async Task<bool> InsertRangeAsync(T[] insertObjs)
+        {
+            return await this._db.Insertable(insertObjs).ExecuteCommandAsync() > 0;
+        }
+        public virtual async Task<bool> InsertRangeAsync(List<T> insertObjs)
+        {
+            return await this._db.Insertable(insertObjs).ExecuteCommandAsync() > 0;
+        }
+        public virtual async Task<bool> UpdateAsync(T updateObj)
+        {
+            return await this._db.Updateable(updateObj).ExecuteCommandAsync() > 0;
+        }
+        public virtual async Task<bool> UpdateRangeAsync(T[] updateObjs)
+        {
+            return await this._db.Updateable(updateObjs).ExecuteCommandAsync() > 0;
+        }
+        public virtual async Task<bool> UpdateRangeAsync(List<T> updateObjs)
+        {
+            return await this._db.Updateable(updateObjs).ExecuteCommandAsync() > 0;
+        }
+        public virtual async Task<bool> UpdateAsync(Expression<Func<T, T>> columns, Expression<Func<T, bool>> whereExpression)
+        {
+            return await this._db.Updateable<T>().SetColumns(columns).Where(whereExpression).ExecuteCommandAsync() > 0;
+        }
+        public virtual async Task<bool> UpdateSetColumnsTrueAsync(Expression<Func<T, T>> columns, Expression<Func<T, bool>> whereExpression)
+        {
+            return await this._db.Updateable<T>().SetColumns(columns, true).Where(whereExpression).ExecuteCommandAsync() > 0;
+        }
+        public virtual async Task<bool> DeleteAsync(T deleteObj)
+        {
+            return await this._db.Deleteable<T>().Where(deleteObj).ExecuteCommandAsync() > 0;
+        }
+        public virtual async Task<bool> DeleteAsync(List<T> deleteObjs)
+        {
+            return await this._db.Deleteable<T>().Where(deleteObjs).ExecuteCommandAsync() > 0;
+        }
+        public virtual async Task<bool> DeleteAsync(Expression<Func<T, bool>> whereExpression)
+        {
+            return await this._db.Deleteable<T>().Where(whereExpression).ExecuteCommandAsync() > 0;
+        }
+        public virtual async Task<bool> DeleteByIdAsync(dynamic id)
+        {
+            return await this._db.Deleteable<T>().In(id).ExecuteCommandAsync() > 0;
+        }
+        public virtual async Task<bool> DeleteByIdsAsync(dynamic[] ids)
+        {
+            return await this._db.Deleteable<T>().In(ids).ExecuteCommandAsync() > 0;
+        }
+
+        public virtual Task<long> InsertReturnSnowflakeIdAsync(T insertObj)
+        {
+            return this._db.Insertable(insertObj).ExecuteReturnSnowflakeIdAsync();
+        }
+        public virtual Task<List<long>> InsertReturnSnowflakeIdAsync(List<T> insertObjs)
+        {
+            return this._db.Insertable(insertObjs).ExecuteReturnSnowflakeIdListAsync();
+        }
+        #endregion
     }
 }

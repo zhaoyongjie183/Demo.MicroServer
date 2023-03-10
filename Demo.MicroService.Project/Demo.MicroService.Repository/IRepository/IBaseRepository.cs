@@ -146,5 +146,40 @@ namespace Demo.MicroService.Repository.IRepository
         (DataTable, List<SugarParameter>) UseStoredProcedureToTuple(string procedureName, List<SugarParameter> parameters);
 
         #endregion Procedure
+
+        #region Async
+        Task<int> CountAsync(Expression<Func<T, bool>> whereExpression);
+        Task<bool> DeleteAsync(Expression<Func<T, bool>> whereExpression);
+        Task<bool> DeleteAsync(T deleteObj);
+        Task<bool> DeleteAsync(List<T> deleteObjs);
+        Task<bool> DeleteByIdAsync(dynamic id);
+        Task<bool> DeleteByIdsAsync(dynamic[] ids);
+        Task<T> GetByIdAsync(dynamic id);
+        Task<List<T>> GetListAsync();
+        Task<List<T>> GetListAsync(Expression<Func<T, bool>> whereExpression);
+        Task<List<T>> GetPageListAsync(Expression<Func<T, bool>> whereExpression, PageModel page);
+        Task<List<T>> GetPageListAsync(Expression<Func<T, bool>> whereExpression, PageModel page, Expression<Func<T, object>> orderByExpression = null, OrderByType orderByType = OrderByType.Asc);
+        Task<List<T>> GetPageListAsync(List<IConditionalModel> conditionalList, PageModel page);
+        Task<List<T>> GetPageListAsync(List<IConditionalModel> conditionalList, PageModel page, Expression<Func<T, object>> orderByExpression = null, OrderByType orderByType = OrderByType.Asc);
+        Task<T> GetSingleAsync(Expression<Func<T, bool>> whereExpression);
+        Task<T> GetFirstAsync(Expression<Func<T, bool>> whereExpression);
+        Task<bool> InsertAsync(T insertObj);
+        Task<bool> InsertOrUpdateAsync(T data);
+        Task<bool> InsertOrUpdateAsync(List<T> datas);
+        Task<bool> InsertRangeAsync(List<T> insertObjs);
+        Task<bool> InsertRangeAsync(T[] insertObjs);
+        Task<int> InsertReturnIdentityAsync(T insertObj);
+        Task<long> InsertReturnBigIdentityAsync(T insertObj);
+        Task<long> InsertReturnSnowflakeIdAsync(T insertObj);
+        Task<List<long>> InsertReturnSnowflakeIdAsync(List<T> insertObjs);
+       
+
+        Task<bool> IsAnyAsync(Expression<Func<T, bool>> whereExpression);
+        Task<bool> UpdateSetColumnsTrueAsync(Expression<Func<T, T>> columns, Expression<Func<T, bool>> whereExpression);
+        Task<bool> UpdateAsync(Expression<Func<T, T>> columns, Expression<Func<T, bool>> whereExpression);
+        Task<bool> UpdateAsync(T updateObj);
+        Task<bool> UpdateRangeAsync(List<T> updateObjs);
+        Task<bool> UpdateRangeAsync(T[] updateObjs);
+        #endregion
     }
 }
