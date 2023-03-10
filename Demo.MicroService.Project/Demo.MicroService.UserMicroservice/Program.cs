@@ -11,6 +11,7 @@ using Demo.MicroService.Core.Middleware;
 using Demo.MicroService.Core.Infrastructure.Swagger;
 using Demo.MicroService.Repository.IRepository.ITenantRepository;
 using Demo.MicroService.Repository.Repository.TenantRepository;
+using Demo.MicroService.Core.HttpApiExtend;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +39,13 @@ builder.Services.AddSqlSugarClient<SqlSugarClient>(config =>
     config.IsAutoCloseConnection = true;
     config.InitKeyType = InitKeyType.Attribute;
     //config.IsShardSameThread = true;
+});
+#endregion
+
+#region http
+builder.Services.AddHttpInvoker(options =>
+{
+    options.Message = "This is Program's Message";
 });
 #endregion
 
