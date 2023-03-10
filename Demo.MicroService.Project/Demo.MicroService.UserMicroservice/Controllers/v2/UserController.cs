@@ -23,6 +23,7 @@ namespace Demo.MicroService.UserMicroservice.Controllers.v2
         [HttpPost]
         public async Task<ResponseResult> AddOrUpdate([FromBody] TSysUser sysUser)
         {
+           // HttpContext.User.Claims
             _logger.LogInformation("sdsdsds");
            // throw new Exception("异常发生了");
             return await _tSysUserService.RegisterUser(sysUser);

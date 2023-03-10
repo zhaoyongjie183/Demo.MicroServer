@@ -4,6 +4,7 @@ using Demo.MicroService.Repository.IRepository.ITenantRepository;
 using SqlSugar;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 
 /**
 *┌──────────────────────────────────────────────────────────────┐
@@ -24,6 +25,7 @@ namespace Demo.MicroService.Repository.Repository.TenantRepository
 
         public TenantBaseRepository(SqlSugarClient dbContext) : base(dbContext)
         {
+          
             dbContext = new SqlSugarClient(new ConnectionConfig() {
                 ConnectionString = "Data Source=192.168.1.6;Initial Catalog=Tenant_T001;User ID=cdms_admin;Password=fZ`glh_m",
                 DbType = SqlSugar.DbType.SqlServer,
