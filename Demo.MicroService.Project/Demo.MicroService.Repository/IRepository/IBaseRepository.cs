@@ -19,7 +19,7 @@ using System.Linq.Expressions;
 */
 namespace Demo.MicroService.Repository.IRepository
 {
-    public interface IBaseRepository<T> : IDependency where T : BaseEntity, new()
+    public interface IBaseRepository<T> : IDependency where T : BaseEntity,new()
     {
         #region add
 
@@ -44,6 +44,7 @@ namespace Demo.MicroService.Repository.IRepository
         DbResult<bool> InsertTran(List<T> t);
 
         T InsertReturnEntity(T t);
+        Task<T> InsertReturnEntityAsync(T t);
 
         T InsertReturnEntity(T t, string sqlWith = SqlWith.UpdLock);
 

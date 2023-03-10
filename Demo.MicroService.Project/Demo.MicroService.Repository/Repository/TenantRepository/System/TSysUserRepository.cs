@@ -1,5 +1,5 @@
 ﻿using Demo.MicroService.BusinessModel.Model.Tenant.System;
-using Demo.MicroService.Repository.IRepository.ITenantRepository;
+using Demo.MicroService.Repository.IRepository.ITenantRepository.ISystem;
 using SqlSugar;
 
 /**
@@ -14,7 +14,7 @@ using SqlSugar;
 *│　类    名： TSysUserRepository                                      
 *└──────────────────────────────────────────────────────────────┘
 */
-namespace Demo.MicroService.Repository.Repository.TenantRepository
+namespace Demo.MicroService.Repository.Repository.TenantRepository.System
 {
     public class TSysUserRepository : BaseRepository<TSysUser>, ITSysUserRepository
     {

@@ -8,12 +8,9 @@ using Demo.MicroService.Repository.Repository;
 using Nacos.AspNetCore.V2;
 using SqlSugar;
 using Demo.MicroService.Core.Middleware;
-using Microsoft.AspNetCore.Mvc.Versioning;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Demo.MicroService.Core.Infrastructure.Swagger;
-using Microsoft.Extensions.Options;
-using Swashbuckle.AspNetCore.SwaggerGen;
+using Demo.MicroService.Repository.IRepository.ITenantRepository;
+using Demo.MicroService.Repository.Repository.TenantRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,7 +42,8 @@ builder.Services.AddSqlSugarClient<SqlSugarClient>(config =>
 #endregion
 
 builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
-builder.Services.AddScoped(typeof(IBaseServices<>), typeof(BaseServices<>));
+builder.Services.AddScoped(typeof(ITenantBaseRepository<>), typeof(TenantBaseRepository<>));
+builder.Services.AddScoped(typeof(IBaseServices), typeof(BaseServices));
 
 ApplicationManager.RegisterAssembly(builder.Services, "Demo.MicroService.BusinessDomain");
 ApplicationManager.RegisterAssembly(builder.Services, "Demo.MicroService.Repository");

@@ -1,26 +1,27 @@
-﻿using Demo.MicroService.Core.Application;
-using Demo.MicroService.Core.Model;
-using SqlSugar;
-using System.Data;
-using System.Dynamic;
-using System.Linq.Expressions;
+﻿using Demo.MicroService.Core.Model;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 /**
 *┌──────────────────────────────────────────────────────────────┐
 *│　描    述：                                                    
 *│　作    者：赵永杰                                             
 *│　版    本：1.0                                                 
-*│　创建时间：2023/3/8 11:28:21                            
+*│　创建时间：2023/3/10 9:17:02                            
 *└──────────────────────────────────────────────────────────────┘
 *┌──────────────────────────────────────────────────────────────┐
-*│　命名空间： Demo.MicroService.BusinessDomain.IServices                              
-*│　类    名： IBaseServices                                      
+*│　命名空间： Demo.MicroService.Repository.IRepository.ITenantRepository                              
+*│　类    名： ITenantRepository                                      
 *└──────────────────────────────────────────────────────────────┘
 */
-namespace Demo.MicroService.BusinessDomain.IServices
+namespace Demo.MicroService.Repository.IRepository.ITenantRepository
 {
-    public interface IBaseServices : IDependency 
+    public interface ITenantBaseRepository<T>: IBaseRepository<T> where T : BaseEntity, new()
     {
-       
+
     }
 }

@@ -17,9 +17,9 @@ using System.Threading.Tasks;
 *│　类    名： ITSysUserRepository                                      
 *└──────────────────────────────────────────────────────────────┘
 */
-namespace Demo.MicroService.Repository.IRepository.ITenantRepository
+namespace Demo.MicroService.Repository.IRepository.ITenantRepository.ISystem
 {
-    public interface ITSysUserRepository:IBaseRepository<TSysUser>
+    public interface ITSysUserRepository : ITenantBaseRepository<TSysUser>
     {
     }
 }

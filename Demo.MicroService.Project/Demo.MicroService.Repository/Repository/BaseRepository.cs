@@ -5,6 +5,7 @@ using System.Data;
 using System.Dynamic;
 using System.Linq.Expressions;
 using Demo.MicroService.Core.Utils;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
 
 /**
 *┌──────────────────────────────────────────────────────────────┐
@@ -20,7 +21,7 @@ using Demo.MicroService.Core.Utils;
 */
 namespace Demo.MicroService.Repository.Repository
 {
-    public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity,new()
+    public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity, new()
     {
         public SqlSugarClient _db;
 
@@ -43,16 +44,15 @@ namespace Demo.MicroService.Repository.Repository
             //});
         }
 
-        //public virtual ConnectionConfig ConnectionString()
+        //public virtual SqlSugarClient GetSqlSugarClient(string ConnectionString)
         //{
-        //    var content = nacosConfigService.GetConfig(NacosConfig.DefaultConnection, NacosConfig.DefaultGroupName, 5000).Result;
-        //    ConnectionConfig connection = new ConnectionConfig()
+        //    return new SqlSugarClient(new ConnectionConfig()
         //    {
-        //        ConnectionString = "Data Source=192.168.1.6;Initial Catalog=DemoMicroService;User ID=cdms_admin;Password=fZ`glh_m",
+        //        ConnectionString = ConnectionString,
         //        DbType = SqlSugar.DbType.SqlServer,
-        //        IsAutoCloseConnection = true
-        //    };
-        //    return connection;
+        //        IsAutoCloseConnection = true,
+        //        InitKeyType = InitKeyType.Attribute,
+        //    });
         //}
 
         #region add
@@ -118,6 +118,17 @@ namespace Demo.MicroService.Repository.Repository
         public T InsertReturnEntity(T t)
         {
             return _db.Insertable(t).ExecuteReturnEntity();
+        }
+
+        //public async Task<TKey> InsertEntityReturnTKeyAsync(T t)
+        //{
+        //    var entity=await _db.Insertable(t).ExecuteReturnEntityAsync();
+        //    return (TKey)entity
+        //}
+
+        public async Task<T> InsertReturnEntityAsync(T t)
+        {
+            return await _db.Insertable(t).ExecuteReturnEntityAsync();
         }
 
         public T InsertReturnEntity(T t, string sqlWith = SqlWith.UpdLock)

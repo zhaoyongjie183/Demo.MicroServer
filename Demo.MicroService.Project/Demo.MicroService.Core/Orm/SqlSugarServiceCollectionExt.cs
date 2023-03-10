@@ -2,6 +2,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SqlSugar;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 /**
 *┌──────────────────────────────────────────────────────────────┐
@@ -66,7 +68,24 @@ namespace Demo.MicroService.Core.Orm
                         {
                             ConfigureExternalServices = new ConfigureExternalServices
                             {
-                                SqlFuncServices = SqlSugarConfig.GetLambda()
+                                SqlFuncServices = SqlSugarConfig.GetLambda(),
+                                EntityService = (property, column) =>
+                                {
+                                    var attributes = property.GetCustomAttributes(true);//get all attributes 
+
+                                    if (attributes.Any(it => it is KeyAttribute))// by attribute set primarykey
+                                    {
+                                        column.IsPrimarykey = true; //有哪些特性可以看 1.2 特性明细
+                                    }
+                                },
+                                EntityNameService = (type, entity) =>
+                                {
+                                    var attributes = type.GetCustomAttributes(true);
+                                    if (attributes.Any(it => it is TableAttribute))
+                                    {
+                                        entity.DbTableName = (attributes.First(it => it is TableAttribute) as TableAttribute).Name;
+                                    }
+                                }
                             }
                         };
                         configAction.Invoke(config);
@@ -123,7 +142,24 @@ namespace Demo.MicroService.Core.Orm
                         {
                             ConfigureExternalServices = new ConfigureExternalServices
                             {
-                                SqlFuncServices = SqlSugarConfig.GetLambda()
+                                SqlFuncServices = SqlSugarConfig.GetLambda(),
+                                EntityService = (property, column) =>
+                                {
+                                    var attributes = property.GetCustomAttributes(true);//get all attributes 
+
+                                    if (attributes.Any(it => it is KeyAttribute))// by attribute set primarykey
+                                    {
+                                        column.IsPrimarykey = true; //有哪些特性可以看 1.2 特性明细
+                                    }
+                                },
+                                EntityNameService = (type, entity) =>
+                                {
+                                    var attributes = type.GetCustomAttributes(true);
+                                    if (attributes.Any(it => it is TableAttribute))
+                                    {
+                                        entity.DbTableName = (attributes.First(it => it is TableAttribute) as TableAttribute).Name;
+                                    }
+                                }
                             }
                         };
                         configAction.Invoke(configS);
@@ -178,7 +214,24 @@ namespace Demo.MicroService.Core.Orm
                         {
                             ConfigureExternalServices = new ConfigureExternalServices
                             {
-                                SqlFuncServices = SqlSugarConfig.GetLambda()
+                                SqlFuncServices = SqlSugarConfig.GetLambda(),
+                                EntityService = (property, column) =>
+                                {
+                                    var attributes = property.GetCustomAttributes(true);//get all attributes 
+
+                                    if (attributes.Any(it => it is KeyAttribute))// by attribute set primarykey
+                                    {
+                                        column.IsPrimarykey = true; //有哪些特性可以看 1.2 特性明细
+                                    }
+                                },
+                                EntityNameService = (type, entity) =>
+                                {
+                                    var attributes = type.GetCustomAttributes(true);
+                                    if (attributes.Any(it => it is TableAttribute))
+                                    {
+                                        entity.DbTableName = (attributes.First(it => it is TableAttribute) as TableAttribute).Name;
+                                    }
+                                }
                             }
                         };
                         configAction.Invoke(configT);
@@ -234,7 +287,24 @@ namespace Demo.MicroService.Core.Orm
             {
                 ConfigureExternalServices = new ConfigureExternalServices
                 {
-                    SqlFuncServices = SqlSugarConfig.GetLambda()
+                    SqlFuncServices = SqlSugarConfig.GetLambda(),
+                    EntityService = (property, column) =>
+                    {
+                        var attributes = property.GetCustomAttributes(true);//get all attributes 
+
+                        if (attributes.Any(it => it is KeyAttribute))// by attribute set primarykey
+                        {
+                            column.IsPrimarykey = true; //有哪些特性可以看 1.2 特性明细
+                        }
+                    },
+                    EntityNameService = (type, entity) =>
+                    {
+                        var attributes = type.GetCustomAttributes(true);
+                        if (attributes.Any(it => it is TableAttribute))
+                        {
+                            entity.DbTableName = (attributes.First(it => it is TableAttribute) as TableAttribute).Name;
+                        }
+                    }
                 }
             };
             configAction.Invoke(configT);

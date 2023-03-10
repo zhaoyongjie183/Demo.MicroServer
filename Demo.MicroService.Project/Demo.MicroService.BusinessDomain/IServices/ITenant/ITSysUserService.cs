@@ -1,4 +1,5 @@
 ﻿using Demo.MicroService.BusinessModel.Model.Tenant.System;
+using Demo.MicroService.Core.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,13 @@ using System.Threading.Tasks;
 */
 namespace Demo.MicroService.BusinessDomain.IServices.ITenant
 {
-    public interface ITSysUserService: IBaseServices<TSysUser>
+    public interface ITSysUserService: IBaseServices
     {
+        /// <summary>
+        /// 注册用户
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        Task<ResponseResult> RegisterUser(TSysUser model);
     }
 }

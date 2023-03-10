@@ -1,6 +1,8 @@
 ﻿using Demo.MicroService.BusinessDomain.IServices.ITenant;
 using Demo.MicroService.BusinessModel.Model.Tenant.System;
+using Demo.MicroService.Core.Model;
 using Demo.MicroService.Repository.IRepository;
+using Demo.MicroService.Repository.IRepository.ITenantRepository.ISystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,10 +23,22 @@ using System.Threading.Tasks;
 */
 namespace Demo.MicroService.BusinessDomain.Services.Tenant
 {
-    internal class TSysUserService : BaseServices<TSysUser>, ITSysUserService
+    public class TSysUserService : ITSysUserService
     {
-        public TSysUserService(IBaseRepository<TSysUser> repository) : base(repository)
+        private ITSysUserRepository _sysUserRepository;
+        public TSysUserService(ITSysUserRepository tSysUserRepository) {
+            this._sysUserRepository = tSysUserRepository;
+        }    
+        /// <summary>
+        /// 注册用户
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<ResponseResult> RegisterUser(TSysUser model)
         {
+            var data=await this._sysUserRepository.InsertReturnEntityAsync(model);
+            ResponseResult responseResult=new ResponseResult<TSysUser>() { DataResult=data};
+            return responseResult;
         }
     }
 }

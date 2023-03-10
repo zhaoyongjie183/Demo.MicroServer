@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Demo.MicroService.BusinessModel.Enum;
 
 /**
@@ -20,7 +16,8 @@ using Demo.MicroService.BusinessModel.Enum;
 */
 namespace Demo.MicroService.BusinessModel.Model.Tenant.System
 {
-    public class TSysUser: TenantBaseEntity
+    [Table("TSysUser")]
+    public class TSysUser : TenantBaseEntity
     {
         /// <summary>
         /// 系统用户ID

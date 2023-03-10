@@ -1,26 +1,26 @@
-﻿using Demo.MicroService.Core.Application;
-using Demo.MicroService.Core.Model;
+﻿using Demo.MicroService.Core.Model;
+using Demo.MicroService.Repository.IRepository.ITenantRepository;
 using SqlSugar;
-using System.Data;
-using System.Dynamic;
-using System.Linq.Expressions;
 
 /**
 *┌──────────────────────────────────────────────────────────────┐
 *│　描    述：                                                    
 *│　作    者：赵永杰                                             
 *│　版    本：1.0                                                 
-*│　创建时间：2023/3/8 11:28:21                            
+*│　创建时间：2023/3/10 9:12:43                            
 *└──────────────────────────────────────────────────────────────┘
 *┌──────────────────────────────────────────────────────────────┐
-*│　命名空间： Demo.MicroService.BusinessDomain.IServices                              
-*│　类    名： IBaseServices                                      
+*│　命名空间： Demo.MicroService.Repository.Repository.TenantRepository                              
+*│　类    名： TenantBaseRepository                                      
 *└──────────────────────────────────────────────────────────────┘
 */
-namespace Demo.MicroService.BusinessDomain.IServices
+namespace Demo.MicroService.Repository.Repository.TenantRepository
 {
-    public interface IBaseServices : IDependency 
+    public class TenantBaseRepository<TEntity> : BaseRepository<TEntity>,ITenantBaseRepository<TEntity> where TEntity : BaseEntity, new()
     {
-       
+        public TenantBaseRepository(SqlSugarClient dbContext) : base(dbContext)
+        {
+
+        }
     }
 }

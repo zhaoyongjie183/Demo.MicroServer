@@ -21,13 +21,13 @@ namespace Demo.MicroService.UserMicroservice.Controllers.v2
         }
 
         [HttpPost]
-        public async Task<JsonResult> AddOrUpdate([FromBody] TSysUser sysUser)
+        public async Task<ResponseResult> AddOrUpdate([FromBody] TSysUser sysUser)
         {
             _logger.LogInformation("sdsdsds");
-            throw new Exception("异常发生了");
-            //_tSysUserService.Insert(sysUser);
-            JsonResult result = new JsonResult(new ResponseResult<TSysUser>() { DataResult = sysUser, IsSuccess = true, Message = "新增成功" });
-            return result;
+           // throw new Exception("异常发生了");
+            return await _tSysUserService.RegisterUser(sysUser);
+            //JsonResult result = new JsonResult(new ResponseResult<TSysUser>() { DataResult = sysUser, IsSuccess = true, Message = "新增成功" });
+            //return result;
         }
     }
 }

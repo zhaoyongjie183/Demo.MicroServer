@@ -1,5 +1,8 @@
 ﻿// See https://aka.ms/new-console-template for more information
+using Demo.MicroService.Core.Orm;
 using SqlSugar;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Reflection;
 
@@ -8,7 +11,28 @@ ConnectionConfig connection = new ConnectionConfig()
 {
     ConnectionString = "Data Source=192.168.1.6;Initial Catalog=DemoMicroService;User ID=cdms_admin;Password=fZ`glh_m",
     DbType = SqlSugar.DbType.SqlServer,
-    IsAutoCloseConnection = true
+    IsAutoCloseConnection = true,
+    ConfigureExternalServices = new ConfigureExternalServices
+    {
+        SqlFuncServices = SqlSugarConfig.GetLambda(),
+        EntityService = (property, column) =>
+        {
+            var attributes = property.GetCustomAttributes(true);//get all attributes 
+
+            if (attributes.Any(it => it is KeyAttribute))// by attribute set primarykey
+            {
+                column.IsPrimarykey = true; //有哪些特性可以看 1.2 特性明细
+            }
+        },
+        EntityNameService = (type, entity) =>
+        {
+            var attributes = type.GetCustomAttributes(true);
+            if (attributes.Any(it => it is TableAttribute))
+            {
+                entity.DbTableName = (attributes.First(it => it is TableAttribute) as TableAttribute).Name;
+            }
+        }
+    }
 };
 using (SqlSugarClient client = new SqlSugarClient(connection))
 {
