@@ -1,6 +1,9 @@
 ﻿using Demo.MicroService.Core.Model;
+using Demo.MicroService.Core.Orm;
 using Demo.MicroService.Repository.IRepository.ITenantRepository;
 using SqlSugar;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 /**
 *┌──────────────────────────────────────────────────────────────┐
@@ -18,9 +21,36 @@ namespace Demo.MicroService.Repository.Repository.TenantRepository
 {
     public class TenantBaseRepository<TEntity> : BaseRepository<TEntity>,ITenantBaseRepository<TEntity> where TEntity : BaseEntity, new()
     {
+
         public TenantBaseRepository(SqlSugarClient dbContext) : base(dbContext)
         {
+            dbContext = new SqlSugarClient(new ConnectionConfig() {
+                ConnectionString = "Data Source=192.168.1.6;Initial Catalog=Tenant_T001;User ID=cdms_admin;Password=fZ`glh_m",
+                DbType = SqlSugar.DbType.SqlServer,
+                IsAutoCloseConnection = true,
+                ConfigureExternalServices = new ConfigureExternalServices
+                {
+                    SqlFuncServices = SqlSugarConfig.GetLambda(),
+                    EntityService = (property, column) =>
+                    {
+                        var attributes = property.GetCustomAttributes(true);//get all attributes 
 
+                        if (attributes.Any(it => it is KeyAttribute))// by attribute set primarykey
+                        {
+                            column.IsPrimarykey = true; //有哪些特性可以看 1.2 特性明细
+                        }
+                    },
+                    EntityNameService = (type, entity) =>
+                    {
+                        var attributes = type.GetCustomAttributes(true);
+                        if (attributes.Any(it => it is TableAttribute))
+                        {
+                            entity.DbTableName = (attributes.First(it => it is TableAttribute) as TableAttribute).Name;
+                        }
+                    }
+                }
+            });
+            _db = dbContext;
         }
     }
 }

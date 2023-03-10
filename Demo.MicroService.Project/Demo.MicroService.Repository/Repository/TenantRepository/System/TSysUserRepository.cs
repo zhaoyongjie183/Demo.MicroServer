@@ -16,7 +16,7 @@ using SqlSugar;
 */
 namespace Demo.MicroService.Repository.Repository.TenantRepository.System
 {
-    public class TSysUserRepository : BaseRepository<TSysUser>, ITSysUserRepository
+    public class TSysUserRepository : TenantBaseRepository<TSysUser>, ITSysUserRepository
     {
         public TSysUserRepository(SqlSugarClient dbContext) : base(dbContext)
         {

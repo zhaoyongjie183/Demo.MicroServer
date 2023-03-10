@@ -9,7 +9,7 @@ using System.Reflection;
 Console.WriteLine("Hello, World!");
 ConnectionConfig connection = new ConnectionConfig()
 {
-    ConnectionString = "Data Source=192.168.1.6;Initial Catalog=DemoMicroService;User ID=cdms_admin;Password=fZ`glh_m",
+    ConnectionString = "Data Source=192.168.1.6;Initial Catalog=Tenant_T001;User ID=cdms_admin;Password=fZ`glh_m",
     DbType = SqlSugar.DbType.SqlServer,
     IsAutoCloseConnection = true,
     ConfigureExternalServices = new ConfigureExternalServices
@@ -41,7 +41,7 @@ using (SqlSugarClient client = new SqlSugarClient(connection))
     Console.WriteLine("创建数据库成功");
     Assembly assembly = Assembly.LoadFile(Path.Combine(AppContext.BaseDirectory, "Demo.MicroService.BusinessModel.dll"));
 
-    Type[] typeArray = assembly.GetTypes().Where(t => !t.Name.Contains("Base") && t.Namespace.Contains("Demo.MicroService.BusinessModel.Model"))
+    Type[] typeArray = assembly.GetTypes().Where(t => !t.Name.Contains("Base") && t.Namespace.Contains("Demo.MicroService.BusinessModel.Model")&&!t.Name.Contains("Mange"))
         .ToArray();
     Console.WriteLine("开始执行创建数据表");
     //创建表：根据实体类CodeFirstTable1  (所有数据库都支持)  

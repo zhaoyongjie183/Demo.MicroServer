@@ -6,6 +6,7 @@ using System.Dynamic;
 using System.Linq.Expressions;
 using Demo.MicroService.Core.Utils;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
+using System.Reflection;
 
 /**
 *┌──────────────────────────────────────────────────────────────┐
@@ -24,7 +25,13 @@ namespace Demo.MicroService.Repository.Repository
     public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity, new()
     {
         public SqlSugarClient _db;
-
+        //public BaseRepository(ISqlSugarClient context)//注意这里要有默认值等于null
+        //{
+        //    var configId = typeof(T).GetCustomAttribute<TenantAttribute>().configId;
+        //    //根据特性指定具体使用哪个库
+        //    base.Context = DbScoped.SugarScope.GetConnection(configId);
+        //    itenant = DbScoped.SugarScope;
+        //}
         public BaseRepository(SqlSugarClient dbContext)
         {
             _db = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
