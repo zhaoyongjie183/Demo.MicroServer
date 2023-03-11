@@ -1,19 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Threading.Tasks;
+﻿using System.Security.Cryptography;
 using Demo.MicroService.AuthenticationCenter.Utility;
 using Demo.MicroService.AuthenticationCenter.Utility.RSA;
 using Demo.MicroService.Core.Model;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 
@@ -69,7 +58,7 @@ namespace Demo.MicroService.AuthenticationCenter.Controllers
         public string Login([FromForm] string name, [FromForm] string password)
         {
             Console.WriteLine($"This is Login name={name} password={password}");
-            if ("Eleven".Equals(name, StringComparison.OrdinalIgnoreCase) && "123456".Equals(password))//应该数据库
+            if ("Zyj".Equals(name, StringComparison.OrdinalIgnoreCase) && "123456".Equals(password))//应该数据库
             {
                 CurrentUserModel currentUser = new CurrentUserModel()
                 {
@@ -127,7 +116,7 @@ namespace Demo.MicroService.AuthenticationCenter.Controllers
         public string LoginWithRefresh([FromForm] string name, [FromForm] string password)
         {
             Console.WriteLine($"This is LoginWithRefresh name={name} password={password}");
-            if ("Eleven".Equals(name, StringComparison.OrdinalIgnoreCase) && "123456".Equals(password))//应该数据库
+            if ("Zyj".Equals(name, StringComparison.OrdinalIgnoreCase) && "123456".Equals(password))//应该数据库
             {
                 CurrentUserModel currentUser = new CurrentUserModel()
                 {
@@ -137,7 +126,7 @@ namespace Demo.MicroService.AuthenticationCenter.Controllers
                     Mobile = "18664876671",
                     Sex = 1,
                     Age = 33,
-                    Name = "Eleven",
+                    Name = "zyj",
                     Role = "Admin"
                 };
 
