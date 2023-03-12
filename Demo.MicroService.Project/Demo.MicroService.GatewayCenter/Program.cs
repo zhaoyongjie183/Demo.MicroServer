@@ -1,12 +1,13 @@
 using Demo.MicroService.Core.JWT;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using Nacos.AspNetCore.V2;
 using Ocelot.DependencyInjection;
 using Ocelot.Provider.Consul;
-using Ocelot.Provider.Nacos;
 using Ocelot.Provider.Polly;
+using Ocelot.Middleware;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Ocelot.Administration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,12 +19,13 @@ builder.Services.AddNacosAspNet(builder.Configuration, section: "NacosConfig"); 
 //builder.Host.UseNacosConfig(section: "NacosConfig");
 builder.Configuration.AddNacosV2Configuration(builder.Configuration.GetSection("NacosConfig"));
 #endregion
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
 // 添加Ocelot对应Nacos扩展
-builder.Services.AddOcelot().AddConsul().AddPolly()/*.AddNacosDiscovery()*/;
+builder.Services.AddOcelot()
+    .AddConsul()
+    .AddPolly()
+    //此配置是用于API更新ocelot配置。
+    .AddAdministration("/administration", "CIMSSecret");/*.AddNacosDiscovery()*/;
 
 #region jwt校验  HS
 JWTTokenOptions tokenOptions = new JWTTokenOptions();
@@ -55,14 +57,14 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    //app.UseSwagger();
+    //app.UseSwaggerUI();
 }
+app.UseOcelot();
+//app.UseHttpsRedirection();
 
-app.UseHttpsRedirection();
+//app.UseAuthorization();
 
-app.UseAuthorization();
-
-app.MapControllers();
+//app.MapControllers();
 
 app.Run();

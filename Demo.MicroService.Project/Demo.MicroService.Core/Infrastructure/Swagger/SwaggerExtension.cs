@@ -35,7 +35,6 @@ namespace Demo.MicroService.Core.Infrastructure.Swagger
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(options =>
             {
-                options.OperationFilter<SwaggerOperationFilter>();
 
                 options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetEntryAssembly().GetName().Name}.xml"), true);
                 options.OperationFilter<AddResponseHeadersFilter>();

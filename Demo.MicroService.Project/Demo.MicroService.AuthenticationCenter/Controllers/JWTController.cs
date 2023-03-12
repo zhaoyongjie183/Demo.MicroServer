@@ -68,7 +68,7 @@ namespace Demo.MicroService.AuthenticationCenter.Controllers
                     Mobile = "18664876671",
                     Sex = 1,
                     Age = 33,
-                    Name = "Eleven",
+                    Name = "11111",
                     Role = "Admin",
                 };
 

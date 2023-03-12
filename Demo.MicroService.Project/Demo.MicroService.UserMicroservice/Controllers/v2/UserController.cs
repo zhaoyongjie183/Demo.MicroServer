@@ -1,6 +1,7 @@
 ﻿using Demo.MicroService.BusinessDomain.IServices.ITenant;
 using Demo.MicroService.BusinessModel.Model.Tenant.System;
 using Demo.MicroService.Core.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,6 +30,13 @@ namespace Demo.MicroService.UserMicroservice.Controllers.v2
             return await _tSysUserService.RegisterUser(sysUser);
             //JsonResult result = new JsonResult(new ResponseResult<TSysUser>() { DataResult = sysUser, IsSuccess = true, Message = "新增成功" });
             //return result;
+        }
+
+        [HttpGet]
+      //  [Authorize]
+        public async Task<ResponseResult> GetName()
+        {
+            return await Task.FromResult(new ResponseResult() { Message="请求成功" });
         }
     }
 }
