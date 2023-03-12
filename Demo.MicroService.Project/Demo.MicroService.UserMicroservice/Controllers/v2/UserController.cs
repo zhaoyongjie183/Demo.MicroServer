@@ -33,7 +33,7 @@ namespace Demo.MicroService.UserMicroservice.Controllers.v2
         }
 
         [HttpGet]
-      //  [Authorize]
+        [Authorize]
         public async Task<ResponseResult> GetName()
         {
             return await Task.FromResult(new ResponseResult() { Message="请求成功" });

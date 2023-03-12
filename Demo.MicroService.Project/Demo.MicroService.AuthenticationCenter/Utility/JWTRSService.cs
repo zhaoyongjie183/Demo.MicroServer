@@ -61,7 +61,7 @@ namespace Demo.MicroService.AuthenticationCenter.Utility
             //string jtiCustom = Guid.NewGuid().ToString();//用来标识 Token
             var claims = new[]
             {
-                   new Claim("scope", "UserWebAPIService"),//为了微服务的Scope
+                   new Claim("scope", "UserMicroservice"),//为了微服务的Scope
                    new Claim(ClaimTypes.Name, userModel.Name),
                    new Claim("EMail", userModel.EMail),
                    new Claim("Account", userModel.Account),

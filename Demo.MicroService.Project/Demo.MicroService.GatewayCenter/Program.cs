@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Ocelot.Administration;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,10 +31,10 @@ builder.Services.AddOcelot()
 #region jwtÐ£Ñé  HS
 JWTTokenOptions tokenOptions = new JWTTokenOptions();
 builder.Configuration.Bind(JWTTokenOptions.JWTTokenOption, tokenOptions);
+Console.WriteLine("================="+Newtonsoft.Json.JsonConvert.SerializeObject(tokenOptions));
 string authenticationProviderKey = "UserGatewayKey";
 
-builder.Services
-.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)//Bearer Scheme
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)//Bearer Scheme
 .AddJwtBearer(authenticationProviderKey, options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
