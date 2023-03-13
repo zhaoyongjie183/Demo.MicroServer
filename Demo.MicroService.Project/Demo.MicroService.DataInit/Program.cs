@@ -60,7 +60,7 @@ using (SqlSugarClient client = new SqlSugarClient(connection))
     Console.WriteLine("创建数据库成功");
     Assembly assembly = Assembly.LoadFile(Path.Combine(AppContext.BaseDirectory, "Demo.MicroService.BusinessModel.dll"));
 
-    Type[] typeArray = assembly.GetTypes().Where(t => !t.Name.Contains("Base") && t.Namespace.Contains("Demo.MicroService.BusinessModel.Model.Mange"))
+    Type[] typeArray = assembly.GetTypes().Where(t => !t.Name.Contains("Base") && t.Namespace.Contains("Demo.MicroService.BusinessModel.Model.Tenant"))
         .ToArray();
     Console.WriteLine("开始执行创建数据表");
     //创建表：根据实体类CodeFirstTable1  (所有数据库都支持)  

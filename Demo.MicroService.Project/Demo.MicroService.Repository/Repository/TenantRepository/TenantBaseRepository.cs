@@ -52,6 +52,7 @@ namespace Demo.MicroService.Repository.Repository.TenantRepository
                 }
             });
             _db = dbContext;
+            
         }
     }
 }
