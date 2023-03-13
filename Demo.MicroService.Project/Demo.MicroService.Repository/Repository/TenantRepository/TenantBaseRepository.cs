@@ -4,7 +4,6 @@ using Demo.MicroService.Repository.IRepository.ITenantRepository;
 using SqlSugar;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Http;
 
 /**
 *┌──────────────────────────────────────────────────────────────┐
@@ -39,7 +38,7 @@ namespace Demo.MicroService.Repository.Repository.TenantRepository
 
                         if (attributes.Any(it => it is KeyAttribute))// by attribute set primarykey
                         {
-                            column.IsPrimarykey = true; //有哪些特性可以看 1.2 特性明细
+                            column.IsPrimarykey = true; 
                         }
                     },
                     EntityNameService = (type, entity) =>

@@ -22,7 +22,8 @@ namespace Demo.MicroService.Repository.IRepository
     public interface IBaseRepository<T> : IDependency where T : BaseEntity,new()
     {
         #region add
-
+        Task<bool> InsertAsync(T t, bool IgnoreNullColumn = true);
+        Task<bool> InsertIgnoreNullColumnAsync(T t, params string[] columns);
         bool Insert(T t, bool IgnoreNullColumn = true);
 
         bool InsertIgnoreNullColumn(T t);

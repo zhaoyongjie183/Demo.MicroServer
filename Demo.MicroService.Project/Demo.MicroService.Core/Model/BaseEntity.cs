@@ -33,7 +33,7 @@ namespace Demo.MicroService.Core.Model
         /// <summary>
         /// 创建者ID
         /// </summary>
-        public Guid? CreatedUser { get; set; }
+        public Guid CreatedUser { get; set; }
 
 
         /// <summary>
@@ -54,6 +54,6 @@ namespace Demo.MicroService.Core.Model
         /// <summary>
         /// 表操作版本
         /// </summary>
-        public long TableOperateVersion { get; set; }
+        public long? TableOperateVersion { get; set; }
     }
 }

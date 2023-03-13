@@ -75,7 +75,7 @@ namespace Demo.MicroService.Core.Orm
 
                                     if (attributes.Any(it => it is KeyAttribute))// by attribute set primarykey
                                     {
-                                        column.IsPrimarykey = true; //有哪些特性可以看 1.2 特性明细
+                                        column.IsPrimarykey = true; 
                                     }
                                 },
                                 EntityNameService = (type, entity) =>
@@ -149,7 +149,7 @@ namespace Demo.MicroService.Core.Orm
 
                                     if (attributes.Any(it => it is KeyAttribute))// by attribute set primarykey
                                     {
-                                        column.IsPrimarykey = true; //有哪些特性可以看 1.2 特性明细
+                                        column.IsPrimarykey = true; 
                                     }
                                 },
                                 EntityNameService = (type, entity) =>

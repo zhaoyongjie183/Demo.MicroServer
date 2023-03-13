@@ -1,4 +1,5 @@
 ﻿using Demo.MicroService.Core.Model;
+using SqlSugar;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 

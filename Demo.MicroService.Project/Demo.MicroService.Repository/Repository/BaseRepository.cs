@@ -66,10 +66,18 @@ namespace Demo.MicroService.Repository.Repository
         {
             return _db.Insertable(t).IgnoreColumns(IgnoreNullColumn).ExecuteCommand() > 0;
         }
-
+        public async Task<bool> InsertAsync(T t, bool IgnoreNullColumn = true)
+        {
+            return await _db.Insertable(t).IgnoreColumns(IgnoreNullColumn).ExecuteCommandAsync() > 0;
+        }
         public bool InsertIgnoreNullColumn(T t)
         {
             return _db.Insertable(t).IgnoreColumns(true).ExecuteCommand() > 0;
+        }
+
+        public async Task<bool> InsertIgnoreNullColumnAsync(T t, params string[] columns)
+        {
+            return await _db.Insertable(t).IgnoreColumns(columns).ExecuteCommandAsync() > 0;
         }
 
         public bool InsertIgnoreNullColumn(T t, params string[] columns)
