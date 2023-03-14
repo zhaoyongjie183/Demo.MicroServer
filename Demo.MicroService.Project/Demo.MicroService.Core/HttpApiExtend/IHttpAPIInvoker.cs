@@ -14,6 +14,6 @@ namespace Demo.MicroService.Core.HttpApiExtend
 {
     public interface IHttpAPIInvoker
     {
-        string InvokeApi(string url);
+        string InvokeApi(string url, string version = "1");
     }
 }

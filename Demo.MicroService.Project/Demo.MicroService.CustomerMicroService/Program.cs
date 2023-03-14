@@ -10,6 +10,7 @@ using Demo.MicroService.Repository.Repository;
 using Demo.MicroService.BusinessDomain.IServices;
 using Demo.MicroService.BusinessDomain.Services;
 using Demo.MicroService.Core.Middleware;
+using Demo.MicroService.Core.HttpApiExtend;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,6 +52,14 @@ ApplicationManager.RegisterAssembly(builder.Services, "Demo.MicroService.Busines
 ApplicationManager.RegisterAssembly(builder.Services, "Demo.MicroService.Repository");
 EngineContext.AttachService(builder.Services);
 EngineContext.AttachConfiguration(builder.Configuration);
+
+#region http
+builder.Services.AddHttpInvoker(options =>
+{
+    options.Message = "This is Program's Message";
+});
+#endregion
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -62,6 +71,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerExt();
     #endregion
 }
+
+
 #region Consul×¢²á
 app.UseHealthCheckMiddleware("/Api/Health/Index");//ĞÄÌøÇëÇóÏìÓ¦
 app.Services.GetService<IConsulRegister>()!.UseConsulRegist();

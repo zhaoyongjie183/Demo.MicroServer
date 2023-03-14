@@ -47,6 +47,19 @@ namespace Demo.MicroService.BusinessDomain.Services.Mange
         }
 
         /// <summary>
+        /// 查询租户信息
+        /// </summary>
+        /// <param name="mangeTenant"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public async Task<ResponseResult> QueryTenant(string TenantCode)
+        {
+            var old = await this._mangeTenantRepository.Queryable().FirstAsync(x => x.TenantCode == TenantCode);
+            return old.IsNullT() ? new ResponseResult() { IsSuccess = false } : new ResponseResult<Guid>() { IsSuccess = true, DataResult = old.MTenantID };
+
+        }
+
+        /// <summary>
         /// 更新客户
         /// </summary>
         /// <param name="mangeTenant"></param>

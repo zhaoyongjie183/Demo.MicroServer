@@ -84,18 +84,11 @@ namespace Demo.MicroService.AuthenticationCenter.Utility
         {
             var claims = new[]
             {
-
-                //new Claim("scope", "UserMicroservice"),//为了微服务的Scope
-
-                new Claim(ClaimTypes.Name, userModel.Name),
-                new Claim("EMail", userModel.EMail),
-                new Claim("Account", userModel.Account),
-                new Claim("Age", userModel.Age.ToString()),
-                new Claim("Id", userModel.Id.ToString()),
+                new Claim(ClaimTypes.Name, userModel.UserName),
+                new Claim("EMail", userModel.Mail),
+                new Claim("UserID", userModel.TSysUserID.ToString()),
                 new Claim("Mobile", userModel.Mobile),
-                new Claim(ClaimTypes.Role,userModel.Role),
-                new Claim("Role", "Assistant"),//这个不能默认角色授权，动态角色授权
-                new Claim("Sex", userModel.Sex.ToString())//各种信息拼装
+                new Claim("MTenantID", userModel.MTenantID.ToString())//各种信息拼装
             };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this._JWTTokenOptions.SecurityKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

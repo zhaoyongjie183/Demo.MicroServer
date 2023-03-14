@@ -34,7 +34,7 @@ namespace Demo.MicroService.BusinessDomain.IServices.ITenant
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        Task<ResponseResult> RegisterUser(TSysUser model);
+        Task<ResponseResult> RegisterUser(TSysUser model, string tenantCode);
 
         /// <summary>
         /// 修改用户
@@ -50,6 +50,16 @@ namespace Demo.MicroService.BusinessDomain.IServices.ITenant
         /// <returns></returns>
         Task<ResponseResult> DeleteUser(Guid id);
 
-        
+        /// <summary>
+        /// 查询客户信息
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="password"></param>
+        /// <param name="tenantCode"></param>
+        /// <returns></returns>
+        Task<ResponseResult> QuerySysUser(string name, string password, string tenantCode);
+
+
+
     }
 }

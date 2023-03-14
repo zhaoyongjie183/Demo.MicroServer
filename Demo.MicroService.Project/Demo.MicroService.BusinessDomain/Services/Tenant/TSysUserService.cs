@@ -1,5 +1,6 @@
 ﻿using Demo.MicroService.BusinessDomain.IServices.ITenant;
 using Demo.MicroService.BusinessModel.Model.Tenant.System;
+using Demo.MicroService.Core.HttpApiExtend;
 using Demo.MicroService.Core.Model;
 using Demo.MicroService.Core.Utils;
 using Demo.MicroService.Repository.IRepository.ITenantRepository.ISystem;
@@ -21,9 +22,11 @@ namespace Demo.MicroService.BusinessDomain.Services.Tenant
     public class TSysUserService : ITSysUserService
     {
         private ITSysUserRepository _sysUserRepository;
-        public TSysUserService(ITSysUserRepository tSysUserRepository)
+        private IHttpAPIInvoker _httpAPIInvoker;
+        public TSysUserService(ITSysUserRepository tSysUserRepository, IHttpAPIInvoker httpAPIInvoker)
         {
             this._sysUserRepository = tSysUserRepository;
+            this._httpAPIInvoker = httpAPIInvoker;
         }
 
         /// <summary>
@@ -44,6 +47,26 @@ namespace Demo.MicroService.BusinessDomain.Services.Tenant
         }
 
         /// <summary>
+        /// 查询用户
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="password"></param>
+        /// <param name="tenantCode"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public async Task<ResponseResult> QuerySysUser(string name, string password, string tenantCode)
+        {
+            var result=this._httpAPIInvoker.InvokeApi("http://localhost:5010/api/Tenant/QueryTenant?tenantCode="+tenantCode);
+            var tenant = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseResult<Guid>>(result);
+            if (tenant.IsNullT()||!tenant.IsSuccess)
+                return new ResponseResult() { IsSuccess = false, Message = "租户不存在" };
+          
+
+            var sysUser = await this._sysUserRepository.Queryable().FirstAsync(x => x.UserName == name && x.UserPassword == password&&x.MTenantID==tenant.DataResult);
+            return new ResponseResult<TSysUser>() { DataResult=sysUser};
+        }
+
+        /// <summary>
         /// 查询客户信息
         /// </summary>
         /// <param name="id"></param>
@@ -52,9 +75,7 @@ namespace Demo.MicroService.BusinessDomain.Services.Tenant
         public async Task<ResponseResult<TSysUser>> QueryUser(Guid id)
         {
             var sysUser = await this._sysUserRepository.Queryable().FirstAsync(x => x.TSysUserID == id && x.IsDeleted);
-            if (sysUser.IsNullT())
-                return new ResponseResult<TSysUser>() { IsSuccess = false, Message = "客户信息不存在" };
-
+          
             return new ResponseResult<TSysUser> { IsSuccess = true, DataResult = sysUser };
         }
 
@@ -63,11 +84,19 @@ namespace Demo.MicroService.BusinessDomain.Services.Tenant
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<ResponseResult> RegisterUser(TSysUser model)
+        public async Task<ResponseResult> RegisterUser(TSysUser model,string tenantCode)
         {
+            var result = this._httpAPIInvoker.InvokeApi("http://localhost:5010/api/Tenant/QueryTenant?tenantCode=" + tenantCode);
+            var tenant = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseResult<Guid>>(result);
+            if (tenant.IsNullT() || !tenant.IsSuccess)
+                return new ResponseResult() { IsSuccess = false, Message = "租户不存在" };
+            model.MTenantID= tenant.DataResult;
+            model.TSysUserID=Guid.NewGuid();
+            model.CreatedTime = DateTime.Now;
+            model.CreatedUser=Guid.NewGuid();
             var data = await this._sysUserRepository.InsertReturnEntityAsync(model);
 
-            return new ResponseResult<TSysUser>() { DataResult = data }; ;
+            return new ResponseResult<TSysUser>() { IsSuccess=true,Message="新增成功",DataResult = data }; ;
         }
 
         /// <summary>
@@ -82,6 +111,8 @@ namespace Demo.MicroService.BusinessDomain.Services.Tenant
             if (sysUser.IsNullT())
                 return new ResponseResult<TSysUser>() { IsSuccess = false, Message = "客户信息不存在" };
 
+            model.UpdatedTime = DateTime.Now;
+            model.UpdatedUser=Guid.NewGuid();
             var result=await this._sysUserRepository.UpdateAsync(model);
 
             return new ResponseResult() { IsSuccess = result, Message = result ? "修改成功" : "修改失败" };

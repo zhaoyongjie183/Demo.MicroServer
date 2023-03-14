@@ -8,17 +8,10 @@ namespace Demo.MicroService.AuthenticationCenter.Utility
 {
     public class CurrentUserModel
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Account { get; set; }
+        public Guid TSysUserID { get; set; }
+        public string UserName { get; set; }
+        public string Mail { get; set; }
         public string Mobile { get; set; }
-        public string EMail { get; set; }
-        //public string Password { get; set; }
-        public string Role { get; set; }
-        public int Age { get; set; }
-        /// <summary>
-        /// 0女 1男
-        /// </summary>
-        public byte Sex { get; set; }
+        public Guid MTenantID { get; set; }
     }
 }

@@ -54,5 +54,16 @@ namespace Demo.MicroService.CustomerMicroService.Controllers.v1
             return await _mangeTenantService.UpdateCustomer(mangeTenant);
 
         }
+
+        /// <summary>
+        /// 查询租户信息
+        /// </summary>
+        /// <param name="tenantCode"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ResponseResult> QueryTenant(string tenantCode)
+        { 
+            return await _mangeTenantService.QueryTenant(tenantCode);
+        }
     }
 }

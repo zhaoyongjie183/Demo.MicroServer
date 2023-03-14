@@ -1,6 +1,7 @@
 ﻿using System.Security.Cryptography;
 using Demo.MicroService.AuthenticationCenter.Utility;
 using Demo.MicroService.AuthenticationCenter.Utility.RSA;
+using Demo.MicroService.Core.HttpApiExtend;
 using Demo.MicroService.Core.Model;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -16,14 +17,17 @@ namespace Demo.MicroService.AuthenticationCenter.Controllers
         private ILogger<JWTController> _logger = null;
         private IJWTService _iJWTService = null;
         private readonly IConfiguration _iConfiguration;
+        private IHttpAPIInvoker _httpAPIInvoker;
         public JWTController(ILoggerFactory factory,
             ILogger<JWTController> logger,
             IConfiguration configuration
-            , IJWTService service)
+            , IJWTService service
+            , IHttpAPIInvoker httpAPIInvoker)
         {
             this._logger = logger;
             this._iConfiguration = configuration;
             this._iJWTService = service;
+            this._httpAPIInvoker = httpAPIInvoker;
         }
         #endregion
 
@@ -55,21 +59,24 @@ namespace Demo.MicroService.AuthenticationCenter.Controllers
         /// <returns></returns>
         [Route("Login")]
         [HttpPost]
-        public string Login([FromForm] string name, [FromForm] string password)
+        public string Login(string name, string password, string TenantCode)
         {
             Console.WriteLine($"This is Login name={name} password={password}");
+            string url = "http://localhost:5001/api/users/all";
+
+            //string content = this._httpAPIInvoker.InvokeApi(realUrl);
             if ("Zyj".Equals(name, StringComparison.OrdinalIgnoreCase) && "123456".Equals(password))//应该数据库
             {
                 CurrentUserModel currentUser = new CurrentUserModel()
                 {
-                    Id = 123,
-                    Account = "xuyang@zhaoxiEdu.Net",
-                    EMail = "57265177@qq.com",
-                    Mobile = "18664876671",
-                    Sex = 1,
-                    Age = 33,
-                    Name = "11111",
-                    Role = "Admin",
+                    //Id = 123,
+                    //Account = "xuyang@zhaoxiEdu.Net",
+                    //EMail = "57265177@qq.com",
+                    //Mobile = "18664876671",
+                    //Sex = 1,
+                    //Age = 33,
+                    //Name = "11111",
+                    //Role = "Admin",
                 };
 
                 string token = this._iJWTService.GetToken(currentUser);
@@ -120,14 +127,14 @@ namespace Demo.MicroService.AuthenticationCenter.Controllers
             {
                 CurrentUserModel currentUser = new CurrentUserModel()
                 {
-                    Id = 123,
-                    Account = "xuyang@zhaoxiEdu.Net",
-                    EMail = "57265177@qq.com",
-                    Mobile = "18664876671",
-                    Sex = 1,
-                    Age = 33,
-                    Name = "zyj",
-                    Role = "Admin"
+                    //Id = 123,
+                    //Account = "xuyang@zhaoxiEdu.Net",
+                    //EMail = "57265177@qq.com",
+                    //Mobile = "18664876671",
+                    //Sex = 1,
+                    //Age = 33,
+                    //Name = "zyj",
+                    //Role = "Admin"
                 };
 
                 var tokenPair = this._iJWTService.GetTokenWithRefresh(currentUser);

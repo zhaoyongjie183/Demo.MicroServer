@@ -1,8 +1,11 @@
 ﻿using Demo.MicroService.BusinessDomain.IServices.ITenant;
+using Demo.MicroService.BusinessModel.DTO.Tenant;
 using Demo.MicroService.BusinessModel.Model.Tenant.System;
 using Demo.MicroService.Core.Model;
 using Demo.MicroService.Core.Utils;
+using Demo.MicroService.Core.ValInject;
 using Microsoft.AspNetCore.Mvc;
+using Omu.ValueInjecter;
 
 namespace Demo.MicroService.UserMicroservice.Controllers.v2
 {
@@ -31,17 +34,19 @@ namespace Demo.MicroService.UserMicroservice.Controllers.v2
         /// <param name="sysUser"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ResponseResult> AddOrUpdate([FromBody] TSysUser sysUser)
+        public async Task<ResponseResult> AddOrUpdate([FromBody] TSysUserDTO sysUserDto)
         {
+            TSysUser sysUser = new TSysUser();
+            sysUser.InjectFrom<CustomValueInjection>(sysUserDto);
             var tsys = await _tSysUserService.QueryUser(sysUser.TSysUserID);
-            if (tsys.IsNullT())
-                return await _tSysUserService.RegisterUser(sysUser);
+            if (tsys.DataResult==null)
+                return await _tSysUserService.RegisterUser(sysUser,sysUserDto.TenantCode);
             else
                 return await _tSysUserService.UpdateUser(sysUser);
         }
 
         /// <summary>
-        /// 查询客户信息
+        /// 查询用户信息
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -52,7 +57,7 @@ namespace Demo.MicroService.UserMicroservice.Controllers.v2
         }
 
         /// <summary>
-        /// 删除客户信息
+        /// 删除用户信息
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -61,6 +66,22 @@ namespace Demo.MicroService.UserMicroservice.Controllers.v2
         {
             return await _tSysUserService.DeleteUser(id);
         }
+
+        /// <summary>
+        /// 查询用户信息
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="password"></param>
+        /// <param name="tenantCode"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ResponseResult> QuerySysUser(string name,string password,string tenantCode)
+        {
+            return await _tSysUserService.QuerySysUser(name, password, tenantCode);
+        }
+
+
+
         [HttpGet]
         //[Authorize]
         public async Task<ResponseResult> GetName()

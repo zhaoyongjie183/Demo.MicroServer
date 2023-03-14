@@ -29,5 +29,7 @@ namespace Demo.MicroService.BusinessDomain.IServices.IMange
         /// <param name="mangeTenant"></param>
         /// <returns></returns>
         Task<ResponseResult> UpdateCustomer(MangeTenant mangeTenant);
+
+        Task<ResponseResult> QueryTenant(string TenantCode);
     }
 }

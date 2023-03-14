@@ -33,7 +33,7 @@ namespace Demo.MicroService.Core.HttpApiExtend
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
-        public string InvokeApi(string url)
+        public string InvokeApi(string url,string version="1")
         {
             Console.WriteLine(this._httpInvokerOptions.Message);
             using (HttpClient httpClient = new HttpClient())
@@ -41,6 +41,8 @@ namespace Demo.MicroService.Core.HttpApiExtend
                 HttpRequestMessage message = new HttpRequestMessage();
                 message.Method = HttpMethod.Get;
                 message.RequestUri = new Uri(url);
+                message.Headers.Add("api-version", version);
+
                 var result = httpClient.SendAsync(message).Result;
                 string content = result.Content.ReadAsStringAsync().Result;
                 return content;

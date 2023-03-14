@@ -1,4 +1,5 @@
 using Demo.MicroService.AuthenticationCenter.Utility;
+using Demo.MicroService.Core.HttpApiExtend;
 using Demo.MicroService.Core.JWT;
 using Microsoft.AspNetCore.Identity;
 using Nacos.AspNetCore.V2;
@@ -22,6 +23,13 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IJWTService, JWTHSService>();
 builder.Services.Configure<JWTTokenOptions>(builder.Configuration.GetSection(JWTTokenOptions.JWTTokenOption));
 #endregion
+#region http
+builder.Services.AddHttpInvoker(options =>
+{
+    options.Message = "This is Program's Message";
+});
+#endregion
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

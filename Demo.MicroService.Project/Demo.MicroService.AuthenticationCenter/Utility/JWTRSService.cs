@@ -62,15 +62,11 @@ namespace Demo.MicroService.AuthenticationCenter.Utility
             var claims = new[]
             {
                    //new Claim("scope", "UserMicroservice"),//为了微服务的Scope
-                   new Claim(ClaimTypes.Name, userModel.Name),
-                   new Claim("EMail", userModel.EMail),
-                   new Claim("Account", userModel.Account),
-                   new Claim("Age", userModel.Age.ToString()),
-                   new Claim("Id", userModel.Id.ToString()),
-                   new Claim("Mobile", userModel.Mobile),
-                   new Claim(ClaimTypes.Role,userModel.Role),
-                   //new Claim("Role", userModel.Role),//这个不能角色授权
-                   new Claim("Sex", userModel.Sex.ToString())//各种信息拼装
+                   new Claim(ClaimTypes.Name, userModel.UserName),
+                new Claim("EMail", userModel.Mail),
+                new Claim("UserID", userModel.TSysUserID.ToString()),
+                new Claim("Mobile", userModel.Mobile),
+                new Claim("MTenantID", userModel.MTenantID.ToString())//各种信息拼装
             };
 
             string keyDir = Directory.GetCurrentDirectory();
