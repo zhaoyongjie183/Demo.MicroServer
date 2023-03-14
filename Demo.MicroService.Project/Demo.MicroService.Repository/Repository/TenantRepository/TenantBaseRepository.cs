@@ -38,23 +38,6 @@ namespace Demo.MicroService.Repository.Repository.TenantRepository
                 ConfigureExternalServices = new ConfigureExternalServices
                 {
                     SqlFuncServices = SqlSugarConfig.GetLambda(),
-                    EntityService = (property, column) =>
-                    {
-                        var attributes = property.GetCustomAttributes(true);//get all attributes 
-
-                        if (attributes.Any(it => it is KeyAttribute))// by attribute set primarykey
-                        {
-                            column.IsPrimarykey = true; 
-                        }
-                    },
-                    EntityNameService = (type, entity) =>
-                    {
-                        var attributes = type.GetCustomAttributes(true);
-                        if (attributes.Any(it => it is TableAttribute))
-                        {
-                            entity.DbTableName = (attributes.First(it => it is TableAttribute) as TableAttribute).Name;
-                        }
-                    }
                 }
             });
             _db = dbContext;

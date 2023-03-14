@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 *│　类    名： TSysUserDTO                                      
 *└──────────────────────────────────────────────────────────────┘
 */
-namespace Demo.MicroService.BusinessModel.DTO.Tenant
+namespace Demo.MicroService.BusinessModel.DTO.Tenant.System
 {
     public class TSysUserDTO
     {

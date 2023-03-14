@@ -1,4 +1,4 @@
-﻿using Demo.MicroService.BusinessDomain.IServices.ITenant;
+﻿using Demo.MicroService.BusinessDomain.IServices.ITenant.ISystem;
 using Demo.MicroService.BusinessModel.Model.Tenant.System;
 using Demo.MicroService.Core.Model;
 using Microsoft.AspNetCore.Http;
@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Demo.MicroService.UserMicroservice.Controllers.v1
 {
-  
+
     [ApiVersion("1",Deprecated = true)]
     [ApiController]
     [Route("api/[controller]/[action]")]

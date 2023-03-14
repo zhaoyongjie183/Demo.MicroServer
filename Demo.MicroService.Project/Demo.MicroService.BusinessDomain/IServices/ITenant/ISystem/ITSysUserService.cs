@@ -18,9 +18,9 @@ using System.Threading.Tasks;
 *│　类    名： ITSysUserService                                      
 *└──────────────────────────────────────────────────────────────┘
 */
-namespace Demo.MicroService.BusinessDomain.IServices.ITenant
+namespace Demo.MicroService.BusinessDomain.IServices.ITenant.ISystem
 {
-    public interface ITSysUserService: IBaseServices
+    public interface ITSysUserService : IBaseServices
     {
         /// <summary>
         /// 查询客户信息

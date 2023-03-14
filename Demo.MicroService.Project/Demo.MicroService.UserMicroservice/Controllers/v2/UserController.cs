@@ -1,5 +1,5 @@
-﻿using Demo.MicroService.BusinessDomain.IServices.ITenant;
-using Demo.MicroService.BusinessModel.DTO.Tenant;
+﻿using Demo.MicroService.BusinessDomain.IServices.ITenant.ISystem;
+using Demo.MicroService.BusinessModel.DTO.Tenant.System;
 using Demo.MicroService.BusinessModel.Model.Tenant.System;
 using Demo.MicroService.Core.Model;
 using Demo.MicroService.Core.Utils;

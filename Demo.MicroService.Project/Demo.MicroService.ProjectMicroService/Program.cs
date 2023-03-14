@@ -9,6 +9,12 @@ using Demo.MicroService.BusinessDomain.IServices;
 using Demo.MicroService.BusinessDomain.Services;
 using Demo.MicroService.Core.Application;
 using Demo.MicroService.Core.Infrastructure;
+using Demo.MicroService.Core.HttpApiExtend;
+using Demo.MicroService.Core.Middleware;
+using Demo.MicroService.Core.JWT;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +46,12 @@ builder.Services.AddSqlSugarClient<SqlSugarClient>(config =>
 #region consul
 builder.Services.AddConsulRegister(builder.Configuration);
 #endregion
+#region http
+builder.Services.AddHttpInvoker(options =>
+{
+    options.Message = "This is Program's Message";
+});
+#endregion
 builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 //builder.Services.AddScoped(typeof(ITenantBaseRepository<>), typeof(TenantBaseRepository<>));
 builder.Services.AddScoped(typeof(IBaseServices), typeof(BaseServices));
@@ -49,7 +61,25 @@ ApplicationManager.RegisterAssembly(builder.Services, "Demo.MicroService.Reposit
 EngineContext.AttachService(builder.Services);
 EngineContext.AttachConfiguration(builder.Configuration);
 // Add services to the container.
-
+#region jwt校验  HS
+JWTTokenOptions tokenOptions = new JWTTokenOptions();
+builder.Configuration.Bind(JWTTokenOptions.JWTTokenOption, tokenOptions);
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        //JWT有一些默认的属性，就是给鉴权时就可以筛选了
+        ValidateIssuer = true,//是否验证Issuer
+        ValidateAudience = true,//是否验证Audience
+        ValidateLifetime = true,//是否验证失效时间---默认还添加了300s后才过期
+        ClockSkew = TimeSpan.FromSeconds(0),//token过期后立马过期
+        ValidateIssuerSigningKey = true,//是否验证SecurityKey
+        ValidAudience = tokenOptions.Audience,//Audience,需要跟前面签发jwt的设置一致
+        ValidIssuer = tokenOptions.Issuer,//Issuer，这两项和前面签发jwt的设置一致
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenOptions.SecurityKey)),//拿到SecurityKey
+    };
+});
+#endregion
 builder.Services.AddControllers();
 
 
@@ -58,10 +88,14 @@ app.ConfigureApplication();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    #region swaggerui
+    app.UseSwaggerExt();
+    #endregion
 }
-
+#region Consul注册
+app.UseHealthCheckMiddleware("/Api/Health/Index");//心跳请求响应
+app.Services.GetService<IConsulRegister>()!.UseConsulRegist();
+#endregion
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
