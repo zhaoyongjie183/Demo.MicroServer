@@ -1,8 +1,10 @@
 ﻿using System.Security.Cryptography;
 using Demo.MicroService.AuthenticationCenter.Utility;
 using Demo.MicroService.AuthenticationCenter.Utility.RSA;
+using Demo.MicroService.BusinessModel.Model.Tenant.System;
 using Demo.MicroService.Core.HttpApiExtend;
 using Demo.MicroService.Core.Model;
+using Demo.MicroService.Core.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -61,52 +63,54 @@ namespace Demo.MicroService.AuthenticationCenter.Controllers
         [HttpPost]
         public string Login(string name, string password, string TenantCode)
         {
-            Console.WriteLine($"This is Login name={name} password={password}");
-            string url = "http://localhost:5001/api/users/all";
+            Console.WriteLine($"This is Login name={name} password={password}  TenantCode={TenantCode}");
 
-            //string content = this._httpAPIInvoker.InvokeApi(realUrl);
-            if ("Zyj".Equals(name, StringComparison.OrdinalIgnoreCase) && "123456".Equals(password))//应该数据库
+            var result = this._httpAPIInvoker.InvokeApi("http://localhost:5010/api/Tenant/QueryTenant?tenantCode=" + TenantCode);
+            var tenant = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseResult<Guid>>(result);
+            if (tenant.IsNullT() || !tenant.IsSuccess)
+                return JsonConvert.SerializeObject(new ResponseResult<string>()
+                {
+                    IsSuccess = false,
+                    Message = "租户不存在",
+                    DataResult = ""
+
+                });
+            result = this._httpAPIInvoker.InvokeApi("http://localhost:5001/api/User/QuerySysUser?name=" + name + "&password=" + password + "&tenantCode=" + TenantCode,"2");
+            var user = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseResult<TSysUser>>(result);
+            if (user.IsNullT() || !user.IsSuccess)
+                return JsonConvert.SerializeObject(new ResponseResult<string>()
+                {
+                    IsSuccess = false,
+                    Message = "用户不存在",
+                    DataResult = ""
+
+                });
+            CurrentUserModel currentUser = new CurrentUserModel()
             {
-                CurrentUserModel currentUser = new CurrentUserModel()
-                {
-                    //Id = 123,
-                    //Account = "xuyang@zhaoxiEdu.Net",
-                    //EMail = "57265177@qq.com",
-                    //Mobile = "18664876671",
-                    //Sex = 1,
-                    //Age = 33,
-                    //Name = "11111",
-                    //Role = "Admin",
-                };
+                UserName = user.DataResult.UserName,
+                TSysUserID=user.DataResult.TSysUserID,
+                MTenantID=user.DataResult.MTenantID,
+                Mobile=user.DataResult.Mobile,
+                Mail =user.DataResult.Mail,
+            };
 
-                string token = this._iJWTService.GetToken(currentUser);
-                if (!string.IsNullOrEmpty(token))
+            string token = this._iJWTService.GetToken(currentUser);
+            if (!string.IsNullOrEmpty(token))
+            {
+                return JsonConvert.SerializeObject(new ResponseResult<string>()
                 {
-                    return JsonConvert.SerializeObject(new ResponseResult<string>()
-                    {
-                        IsSuccess = true,
-                        Message = "Token颁发成功",
-                        DataResult = token
-                    });
-                }
-                else
-                {
-                    return JsonConvert.SerializeObject(new ResponseResult<string>()
-                    {
-                        IsSuccess = false,
-                        Message = "Token获取失败",
-                        DataResult = ""
-                    });
-                }
+                    IsSuccess = true,
+                    Message = "Token颁发成功",
+                    DataResult = token
+                });
             }
             else
             {
                 return JsonConvert.SerializeObject(new ResponseResult<string>()
                 {
                     IsSuccess = false,
-                    Message = "验证失败",
+                    Message = "Token获取失败",
                     DataResult = ""
-                 
                 });
             }
         }

@@ -4,6 +4,7 @@ using Demo.MicroService.BusinessModel.Model.Tenant.System;
 using Demo.MicroService.Core.Model;
 using Demo.MicroService.Core.Utils;
 using Demo.MicroService.Core.ValInject;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Omu.ValueInjecter;
 
@@ -29,12 +30,12 @@ namespace Demo.MicroService.UserMicroservice.Controllers.v2
         }
 
         /// <summary>
-        /// 用户新增或者修改
+        /// 用户新增
         /// </summary>
         /// <param name="sysUser"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ResponseResult> AddOrUpdate([FromBody] TSysUserDTO sysUserDto)
+        public async Task<ResponseResult> AddUser([FromBody] TSysUserDTO sysUserDto)
         {
             TSysUser sysUser = new TSysUser();
             sysUser.InjectFrom<CustomValueInjection>(sysUserDto);
@@ -46,12 +47,31 @@ namespace Demo.MicroService.UserMicroservice.Controllers.v2
         }
 
         /// <summary>
+        /// 修改用户
+        /// </summary>
+        /// <param name="sysUserDto"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Authorize]
+        public async Task<ResponseResult> UpdateUser([FromBody] TSysUserDTO sysUserDto)
+        {
+            TSysUser sysUser = new TSysUser();
+            sysUser.InjectFrom<CustomValueInjection>(sysUserDto);
+            var tsys = await _tSysUserService.QueryUserByName(sysUser.UserName);
+            if (tsys.DataResult == null)
+                return new ResponseResult() { IsSuccess = false, Message = "客户信息不存在" };
+            else
+                return await _tSysUserService.UpdateUser(sysUser);
+        }
+
+        /// <summary>
         /// 查询用户信息
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ResponseResult<TSysUser>> QueryUser(Guid id)
+
+        public async Task<ResponseResult<TSysUser>> QueryUserById(Guid id)
         {
             return await _tSysUserService.QueryUser(id); 
         }
@@ -62,6 +82,7 @@ namespace Demo.MicroService.UserMicroservice.Controllers.v2
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
+        [Authorize]
         public async Task<ResponseResult> DeleteUser(Guid id)
         {
             return await _tSysUserService.DeleteUser(id);

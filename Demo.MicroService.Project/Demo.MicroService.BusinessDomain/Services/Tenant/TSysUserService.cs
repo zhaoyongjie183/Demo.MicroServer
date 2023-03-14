@@ -63,7 +63,19 @@ namespace Demo.MicroService.BusinessDomain.Services.Tenant
           
 
             var sysUser = await this._sysUserRepository.Queryable().FirstAsync(x => x.UserName == name && x.UserPassword == password&&x.MTenantID==tenant.DataResult);
-            return new ResponseResult<TSysUser>() { DataResult=sysUser};
+            return new ResponseResult<TSysUser>() { IsSuccess=!sysUser.IsNullT(), DataResult=sysUser};
+        }
+
+        /// <summary>
+        /// 查询客户信息
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public async Task<ResponseResult<TSysUser>> QueryUserByName(string  name)
+        {
+            var sysUser = await this._sysUserRepository.Queryable().FirstAsync(x => x.UserName == name && x.IsDeleted);
+
+            return new ResponseResult<TSysUser> { IsSuccess = true, DataResult = sysUser };
         }
 
         /// <summary>

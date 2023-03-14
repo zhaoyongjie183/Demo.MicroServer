@@ -59,7 +59,12 @@ namespace Demo.MicroService.BusinessDomain.IServices.ITenant
         /// <returns></returns>
         Task<ResponseResult> QuerySysUser(string name, string password, string tenantCode);
 
-
+        /// <summary>
+        /// 查询客户信息
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        Task<ResponseResult<TSysUser>> QueryUserByName(string name);
 
     }
 }

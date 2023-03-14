@@ -17,6 +17,7 @@ using Demo.MicroService.Core.JWT;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Nacos.V2.Naming.Dtos;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -81,7 +82,7 @@ builder.Services.AddConsulRegister(builder.Configuration);
 builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 builder.Services.AddScoped(typeof(ITenantBaseRepository<>), typeof(TenantBaseRepository<>));
 builder.Services.AddScoped(typeof(IBaseServices), typeof(BaseServices));
-
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 ApplicationManager.RegisterAssembly(builder.Services, "Demo.MicroService.BusinessDomain");
 ApplicationManager.RegisterAssembly(builder.Services, "Demo.MicroService.Repository");
 EngineContext.AttachService(builder.Services);
