@@ -27,5 +27,12 @@ namespace Demo.MicroService.BusinessDomain.IServices.ITenant.IProject
         /// </summary>
         /// <returns></returns>
         Task<ResponseResult> AddProject(ProjectDTO projectDTO);
+
+        /// <summary>
+        /// 修改项目
+        /// </summary>
+        /// <param name="projectDTO"></param>
+        /// <returns></returns>
+        Task<ResponseResult> UpdateProject(ProjectDTO projectDTO);
     }
 }

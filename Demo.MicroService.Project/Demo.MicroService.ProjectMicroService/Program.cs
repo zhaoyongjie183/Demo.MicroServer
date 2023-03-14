@@ -22,6 +22,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IUser, AspNetUser>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Logging.AddLog4Net();
+
 #region Nacos配置
 // 注册服务到Nacos
 builder.Services.AddNacosAspNet(builder.Configuration, section: "NacosConfig"); //默认节点Nacos
@@ -32,6 +33,7 @@ builder.Configuration.AddNacosV2Configuration(builder.Configuration.GetSection("
 #region swagger
 builder.AddSwaggerGenExt();
 #endregion
+
 #region Orm
 var sqlSugarConfig = SqlSugarConfig.GetConnectionString(builder.Configuration);
 builder.Services.AddSqlSugarClient<SqlSugarClient>(config =>
@@ -46,12 +48,15 @@ builder.Services.AddSqlSugarClient<SqlSugarClient>(config =>
 #region consul
 builder.Services.AddConsulRegister(builder.Configuration);
 #endregion
+
 #region http
 builder.Services.AddHttpInvoker(options =>
 {
     options.Message = "This is Program's Message";
 });
 #endregion
+
+#region ioc
 builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 //builder.Services.AddScoped(typeof(ITenantBaseRepository<>), typeof(TenantBaseRepository<>));
 builder.Services.AddScoped(typeof(IBaseServices), typeof(BaseServices));
@@ -60,6 +65,7 @@ ApplicationManager.RegisterAssembly(builder.Services, "Demo.MicroService.Busines
 ApplicationManager.RegisterAssembly(builder.Services, "Demo.MicroService.Repository");
 EngineContext.AttachService(builder.Services);
 EngineContext.AttachConfiguration(builder.Configuration);
+#endregion
 // Add services to the container.
 #region jwt校验  HS
 JWTTokenOptions tokenOptions = new JWTTokenOptions();
@@ -80,6 +86,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     };
 });
 #endregion
+
 builder.Services.AddControllers();
 
 
@@ -96,6 +103,7 @@ if (app.Environment.IsDevelopment())
 app.UseHealthCheckMiddleware("/Api/Health/Index");//心跳请求响应
 app.Services.GetService<IConsulRegister>()!.UseConsulRegist();
 #endregion
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

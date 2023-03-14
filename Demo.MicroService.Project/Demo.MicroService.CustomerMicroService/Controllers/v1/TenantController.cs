@@ -8,6 +8,9 @@ using Omu.ValueInjecter;
 
 namespace Demo.MicroService.CustomerMicroService.Controllers.v1
 {
+    /// <summary>
+    /// 客户管理API
+    /// </summary>
     [Route("api/[controller]/[action]")]
     [ApiController]
     [ApiVersion("1")]

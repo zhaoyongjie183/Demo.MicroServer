@@ -4,6 +4,7 @@ using Demo.MicroService.BusinessModel.Model.Tenant.Project;
 using Demo.MicroService.BusinessModel.Model.Tenant.System;
 using Demo.MicroService.Core.Application;
 using Demo.MicroService.Core.Model;
+using Demo.MicroService.Core.Utils;
 using Demo.MicroService.Core.ValInject;
 using Demo.MicroService.Repository.IRepository.ITenantRepository.IPoject;
 using Omu.ValueInjecter;
@@ -48,6 +49,27 @@ namespace Demo.MicroService.BusinessDomain.Services.Tenant.Project
             var data = await _projectRepository.InsertReturnEntityAsync(projectMange);
 
             return new ResponseResult<ProjectMange>() { IsSuccess = true, Message = "新增成功", DataResult = projectMange }; ;
+        }
+
+        /// <summary>
+        /// 修改项目
+        /// </summary>
+        /// <param name="projectDTO"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public async Task<ResponseResult> UpdateProject(ProjectDTO projectDTO)
+        {
+            var projectMange = await _projectRepository.Queryable().FirstAsync(x => x.MTenantID == ApplicationContext.User.MTenantId && !x.IsDeleted&&x.ProjectCode==projectDTO.ProjectCode);
+            if (projectMange.IsNullT())
+                return new ResponseResult() { IsSuccess = false, Message = "项目信息不存在" };
+
+            projectMange.UpdatedTime = DateTime.Now;
+            projectMange.UpdatedUser = Guid.NewGuid();
+            projectMange.ProjectName= projectDTO.ProjectName;
+            projectMange.Description= projectDTO.Description;
+            var result = await _projectRepository.UpdateAsync(projectMange);
+
+            return new ResponseResult() { IsSuccess = result, Message = result ? "修改成功" : "修改失败" };
         }
     }
 }

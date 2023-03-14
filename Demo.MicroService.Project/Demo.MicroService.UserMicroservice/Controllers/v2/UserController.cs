@@ -12,6 +12,9 @@ using System.Web;
 
 namespace Demo.MicroService.UserMicroservice.Controllers.v2
 {
+    /// <summary>
+    /// 用户管理API
+    /// </summary>
     [ApiVersion("2")]
     [Route("api/[controller]/[action]")]
     [ApiController]

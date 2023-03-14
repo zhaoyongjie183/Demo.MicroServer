@@ -74,7 +74,7 @@ namespace Demo.MicroService.BusinessDomain.Services.Tenant.System
         /// <returns></returns>
         public async Task<ResponseResult<TSysUser>> QueryUserByName(string name)
         {
-            var sysUser = await _sysUserRepository.Queryable().FirstAsync(x => x.UserName == name && x.IsDeleted);
+            var sysUser = await _sysUserRepository.Queryable().FirstAsync(x => x.UserName == name && !x.IsDeleted);
 
             return new ResponseResult<TSysUser> { IsSuccess = true, DataResult = sysUser };
         }
@@ -132,9 +132,9 @@ namespace Demo.MicroService.BusinessDomain.Services.Tenant.System
         /// <exception cref="NotImplementedException"></exception>
         public async Task<ResponseResult> UpdateUser(TSysUser model)
         {
-            var sysUser = await _sysUserRepository.Queryable().FirstAsync(x => x.TSysUserID == model.TSysUserID && x.IsDeleted);
+            var sysUser = await _sysUserRepository.Queryable().FirstAsync(x => x.TSysUserID == model.TSysUserID && !x.IsDeleted);
             if (sysUser.IsNullT())
-                return new ResponseResult<TSysUser>() { IsSuccess = false, Message = "客户信息不存在" };
+                return new ResponseResult() { IsSuccess = false, Message = "客户信息不存在" };
 
             model.UpdatedTime = DateTime.Now;
             model.UpdatedUser = Guid.NewGuid();
