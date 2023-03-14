@@ -3,10 +3,12 @@ using Demo.MicroService.BusinessModel.DTO.Tenant;
 using Demo.MicroService.BusinessModel.Model.Tenant.System;
 using Demo.MicroService.Core.Model;
 using Demo.MicroService.Core.Utils;
+using Demo.MicroService.Core.Utils.Excel;
 using Demo.MicroService.Core.ValInject;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Omu.ValueInjecter;
+using System.Web;
 
 namespace Demo.MicroService.UserMicroservice.Controllers.v2
 {
@@ -39,11 +41,7 @@ namespace Demo.MicroService.UserMicroservice.Controllers.v2
         {
             TSysUser sysUser = new TSysUser();
             sysUser.InjectFrom<CustomValueInjection>(sysUserDto);
-            var tsys = await _tSysUserService.QueryUser(sysUser.TSysUserID);
-            if (tsys.DataResult==null)
-                return await _tSysUserService.RegisterUser(sysUser,sysUserDto.TenantCode);
-            else
-                return await _tSysUserService.UpdateUser(sysUser);
+            return await _tSysUserService.RegisterUser(sysUser, sysUserDto.TenantCode);
         }
 
         /// <summary>
@@ -70,10 +68,11 @@ namespace Demo.MicroService.UserMicroservice.Controllers.v2
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
+        [Authorize]
 
-        public async Task<ResponseResult<TSysUser>> QueryUserById(Guid id)
+        public async Task<ResponseResult<List<TSysUser>>> QueryUser()
         {
-            return await _tSysUserService.QueryUser(id); 
+            return await _tSysUserService.QueryUser(); 
         }
 
         /// <summary>
@@ -88,6 +87,20 @@ namespace Demo.MicroService.UserMicroservice.Controllers.v2
             return await _tSysUserService.DeleteUser(id);
         }
 
+        /// <summary>
+        /// 导出
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> ExportSysUser()
+        {
+            var result= await _tSysUserService.QueryUser();
+            if (result.IsNullT() || result.DataResult.IsNullT())
+                return new JsonResult(new ResponseResult() { IsSuccess = false, Message = "导出失败" });
+            var buffer = NpoiUtil.Export(result.DataResult);
+             return File(buffer, "application/octet-stream", DateTime.Now.ToString() + "-" + HttpUtility.UrlEncode("物料") + ".xlsx");
+        }
         /// <summary>
         /// 查询用户信息
         /// </summary>

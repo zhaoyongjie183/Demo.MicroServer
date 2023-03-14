@@ -27,7 +27,13 @@ namespace Demo.MicroService.BusinessDomain.IServices.ITenant
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<ResponseResult<TSysUser>> QueryUser(Guid id);
+        Task<ResponseResult<List<TSysUser>>> QueryUser();
+
+        /// <summary>
+        /// 查询客户根据ID
+        /// </summary>
+        /// <returns></returns>
+        Task<ResponseResult<TSysUser>> QueryUserById(Guid id);
 
         /// <summary>
         /// 注册用户

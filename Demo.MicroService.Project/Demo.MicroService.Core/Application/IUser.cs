@@ -1,44 +1,34 @@
-﻿/**
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
+
+/**
 *┌──────────────────────────────────────────────────────────────┐
 *│　描    述：                                                    
 *│　作    者：赵永杰                                             
 *│　版    本：1.0                                                 
-*│　创建时间：2023/3/8 11:05:29                            
+*│　创建时间：2023/3/14 11:54:59                            
 *└──────────────────────────────────────────────────────────────┘
 *┌──────────────────────────────────────────────────────────────┐
-*│　命名空间： Demo.MicroService.Core.Utils                              
-*│　类    名： StringExtension                                      
+*│　命名空间： Demo.MicroService.Core.Application                              
+*│　类    名： IUser                                      
 *└──────────────────────────────────────────────────────────────┘
 */
-namespace Demo.MicroService.Core.Utils
+namespace Demo.MicroService.Core.Application
 {
-    public static class StringExtension
+    public interface IUser
     {
-        /// <summary>
-        /// 判断是否为空
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static bool IsNull(this string value)
-        {
-            return value == null || value == "" || value == string.Empty || value == " " || value.Length == 0;
-        }
-        public static Guid ToGuid(this string target)
-        {
-            Guid result = Guid.Empty;
+        string Name { get; }
+        Guid UserId { get; }
+        Guid MTenantId { get; }
+        bool IsAuthenticated();
+        IEnumerable<Claim> GetClaimsIdentity();
+        List<string> GetClaimValueByType(string ClaimType);
 
-            if ((!string.IsNullOrEmpty(target)))
-            {
-                try
-                {
-                    result = Guid.Parse(target);
-                }
-                catch (FormatException)
-                {
-                }
-            }
-
-            return result;
-        }
+        string GetToken();
+        List<string> GetUserInfoFromToken(string ClaimType);
     }
 }

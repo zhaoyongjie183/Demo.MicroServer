@@ -9,6 +9,15 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="6.1.0" />
+    <PackageReference Include="nacos-sdk-csharp.AspNetCore" Version="1.3.4" />
+    <PackageReference Include="nacos-sdk-csharp.Extensions.Configuration" Version="1.3.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Demo.MicroService.BusinessDomain\Demo.MicroService.BusinessDomain.csproj" />
+    <ProjectReference Include="..\Demo.MicroService.Core\Demo.MicroService.Core.csproj" />
+    <ProjectReference Include="..\Demo.MicroService.Repository\Demo.MicroService.Repository.csproj" />
   </ItemGroup>
 
 </Project>

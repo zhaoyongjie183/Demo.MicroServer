@@ -22,6 +22,13 @@ using Nacos.V2.Naming.Dtos;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Logging.AddLog4Net();
+
+builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+builder.Services.AddScoped(typeof(ITenantBaseRepository<>), typeof(TenantBaseRepository<>));
+builder.Services.AddScoped(typeof(IBaseServices), typeof(BaseServices));
+builder.Services.AddScoped<IUser, AspNetUser>();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
 #region Nacos配置
 // 注册服务到Nacos
 builder.Services.AddNacosAspNet(builder.Configuration, section: "NacosConfig"); //默认节点Nacos
@@ -79,10 +86,7 @@ builder.Services.AddHttpInvoker(options =>
 builder.Services.AddConsulRegister(builder.Configuration);
 #endregion
 
-builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
-builder.Services.AddScoped(typeof(ITenantBaseRepository<>), typeof(TenantBaseRepository<>));
-builder.Services.AddScoped(typeof(IBaseServices), typeof(BaseServices));
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
 ApplicationManager.RegisterAssembly(builder.Services, "Demo.MicroService.BusinessDomain");
 ApplicationManager.RegisterAssembly(builder.Services, "Demo.MicroService.Repository");
 EngineContext.AttachService(builder.Services);
@@ -90,7 +94,7 @@ EngineContext.AttachConfiguration(builder.Configuration);
 
 
 var app = builder.Build();
-
+app.ConfigureApplication();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

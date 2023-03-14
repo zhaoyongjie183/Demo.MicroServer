@@ -1,44 +1,26 @@
-﻿/**
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+/**
 *┌──────────────────────────────────────────────────────────────┐
 *│　描    述：                                                    
 *│　作    者：赵永杰                                             
 *│　版    本：1.0                                                 
-*│　创建时间：2023/3/8 11:05:29                            
+*│　创建时间：2023/3/14 11:24:43                            
 *└──────────────────────────────────────────────────────────────┘
 *┌──────────────────────────────────────────────────────────────┐
-*│　命名空间： Demo.MicroService.Core.Utils                              
-*│　类    名： StringExtension                                      
+*│　命名空间： Demo.MicroService.Core.Model                              
+*│　类    名： ExcelVersion                                      
 *└──────────────────────────────────────────────────────────────┘
 */
-namespace Demo.MicroService.Core.Utils
+namespace Demo.MicroService.Core.Model
 {
-    public static class StringExtension
+    public enum ExcelVersion
     {
-        /// <summary>
-        /// 判断是否为空
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static bool IsNull(this string value)
-        {
-            return value == null || value == "" || value == string.Empty || value == " " || value.Length == 0;
-        }
-        public static Guid ToGuid(this string target)
-        {
-            Guid result = Guid.Empty;
-
-            if ((!string.IsNullOrEmpty(target)))
-            {
-                try
-                {
-                    result = Guid.Parse(target);
-                }
-                catch (FormatException)
-                {
-                }
-            }
-
-            return result;
-        }
+        V2007,
+        V2003
     }
 }

@@ -1,44 +1,36 @@
-﻿/**
+﻿using Demo.MicroService.Core.Utils;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
+
+/**
 *┌──────────────────────────────────────────────────────────────┐
 *│　描    述：                                                    
 *│　作    者：赵永杰                                             
 *│　版    本：1.0                                                 
-*│　创建时间：2023/3/8 11:05:29                            
+*│　创建时间：2023/3/14 11:43:52                            
 *└──────────────────────────────────────────────────────────────┘
 *┌──────────────────────────────────────────────────────────────┐
-*│　命名空间： Demo.MicroService.Core.Utils                              
-*│　类    名： StringExtension                                      
+*│　命名空间： Demo.MicroService.Core.Application                              
+*│　类    名： ApplicationContext                                      
 *└──────────────────────────────────────────────────────────────┘
 */
-namespace Demo.MicroService.Core.Utils
+namespace Demo.MicroService.Core.Application
 {
-    public static class StringExtension
+    public class ApplicationContext
     {
+        public static IServiceProvider RootServices => InternalApp.RootServices;
+
         /// <summary>
-        /// 判断是否为空
+        /// 获取请求上下文
         /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static bool IsNull(this string value)
-        {
-            return value == null || value == "" || value == string.Empty || value == " " || value.Length == 0;
-        }
-        public static Guid ToGuid(this string target)
-        {
-            Guid result = Guid.Empty;
+        public static HttpContext HttpContext => RootServices?.GetService<IHttpContextAccessor>()?.HttpContext;
 
-            if ((!string.IsNullOrEmpty(target)))
-            {
-                try
-                {
-                    result = Guid.Parse(target);
-                }
-                catch (FormatException)
-                {
-                }
-            }
-
-            return result;
-        }
+        public static IUser User => HttpContext == null ? null : RootServices?.GetService<IUser>();
     }
 }

@@ -1,9 +1,11 @@
 ﻿using Demo.MicroService.BusinessDomain.IServices.ITenant;
 using Demo.MicroService.BusinessModel.Model.Tenant.System;
+using Demo.MicroService.Core.Application;
 using Demo.MicroService.Core.HttpApiExtend;
 using Demo.MicroService.Core.Model;
 using Demo.MicroService.Core.Utils;
 using Demo.MicroService.Repository.IRepository.ITenantRepository.ISystem;
+using System.Threading.Tasks;
 
 /**
 *┌──────────────────────────────────────────────────────────────┐
@@ -84,10 +86,22 @@ namespace Demo.MicroService.BusinessDomain.Services.Tenant
         /// <param name="id"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public async Task<ResponseResult<TSysUser>> QueryUser(Guid id)
+        public async Task<ResponseResult<List<TSysUser>>> QueryUser()
         {
-            var sysUser = await this._sysUserRepository.Queryable().FirstAsync(x => x.TSysUserID == id && x.IsDeleted);
+            var sysUser = await this._sysUserRepository.GetListAsync(x => x.MTenantID == ApplicationContext.User.MTenantId && !x.IsDeleted);
           
+            return new ResponseResult<List<TSysUser>> { IsSuccess = true, DataResult = sysUser };
+        }
+
+        /// <summary>
+        /// 查询客户ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<ResponseResult<TSysUser>> QueryUserById(Guid id)
+        {
+            var sysUser = await this._sysUserRepository.Queryable().FirstAsync(x => x.TSysUserID == id);
+
             return new ResponseResult<TSysUser> { IsSuccess = true, DataResult = sysUser };
         }
 

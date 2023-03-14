@@ -90,8 +90,7 @@ namespace Demo.MicroService.Core.Orm
                         };
                         configAction.Invoke(config);
                         var log = serviceProvider.GetRequiredService<ILogger<T>>();
-                        var db = new SqlSugarClient(config)
-                       ;
+                        var db = new SqlSugarClient(config);
                         var configuration = serviceProvider.GetRequiredService<IConfiguration>();
                         string flag = configuration["Log:sqllog"];
                         if (string.IsNullOrWhiteSpace(flag))
