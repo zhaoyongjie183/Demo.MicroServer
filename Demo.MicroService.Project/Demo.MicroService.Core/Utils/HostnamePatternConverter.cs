@@ -1,4 +1,5 @@
 ﻿using log4net.Util;
+using System.Net;
 
 /**
 *┌──────────────────────────────────────────────────────────────┐
@@ -18,7 +19,7 @@ namespace Demo.MicroService.Core
     {
         protected override async void Convert(TextWriter writer, object state)
         {
-            await writer.WriteAsync("zyj");
+            await writer.WriteAsync(Dns.GetHostName());
         }
     }
 }
