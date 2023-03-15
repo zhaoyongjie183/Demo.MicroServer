@@ -95,10 +95,13 @@ app.ConfigureApplication();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    #region swaggerui
-    app.UseSwaggerExt();
-    #endregion
+    
 }
+
+#region swaggerui
+app.UseSwaggerExt();
+#endregion
+
 #region Consul×¢²á
 app.UseHealthCheckMiddleware("/Api/Health/Index");//ĞÄÌøÇëÇóÏìÓ¦
 app.Services.GetService<IConsulRegister>()!.UseConsulRegist();

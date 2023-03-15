@@ -63,14 +63,9 @@ builder.Services.AddHttpInvoker(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    //app.UseSwagger();
-    //app.UseSwaggerUI();
-    #region swaggerui
-    app.UseSwaggerExt();
-    #endregion
-}
+#region swaggerui
+app.UseSwaggerExt();
+#endregion
 
 
 #region Consul×¢²á

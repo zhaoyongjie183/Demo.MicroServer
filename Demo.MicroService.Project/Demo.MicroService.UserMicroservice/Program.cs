@@ -109,10 +109,12 @@ if (app.Environment.IsDevelopment())
 
     //    options.RoutePrefix = "swagger";
     //});
-    #region swaggerui
-    app.UseSwaggerExt();
-    #endregion
+   
 }
+
+#region swaggerui
+app.UseSwaggerExt();
+#endregion
 
 #region Consul×¢²á
 app.UseHealthCheckMiddleware("/Api/Health/Index");//ĞÄÌøÇëÇóÏìÓ¦

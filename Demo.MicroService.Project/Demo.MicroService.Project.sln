@@ -35,7 +35,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.MicroService.Authentic
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Compose", "Compose", "{625D102F-8B3F-493B-ACFE-335FDFC300E5}"
 	ProjectSection(SolutionItems) = preProject
-		..\..\..\资料\studydata\复习资料\Consul配套文档\3minimalapicompose\docker-compose.yml = ..\..\..\资料\studydata\复习资料\Consul配套文档\3minimalapicompose\docker-compose.yml
+		docker-compose.yml = docker-compose.yml
 	EndProjectSection
 EndProject
 Global
