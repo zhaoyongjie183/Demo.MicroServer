@@ -15,9 +15,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 #region Nacos配置
 // 注册服务到Nacos
-//builder.Services.AddNacosAspNet(builder.Configuration, section: "NacosConfig"); //默认节点Nacos
-////builder.Host.UseNacosConfig(section: "NacosConfig");
-//builder.Configuration.AddNacosV2Configuration(builder.Configuration.GetSection("NacosConfig"));
+builder.Services.AddNacosAspNet(builder.Configuration, section: "NacosConfig"); //默认节点Nacos
+//builder.Host.UseNacosConfig(section: "NacosConfig");
+builder.Configuration.AddNacosV2Configuration(builder.Configuration.GetSection("NacosConfig"));
 #endregion
 #region HS256 对称可逆加密
 builder.Services.AddScoped<IJWTService, JWTHSService>();
