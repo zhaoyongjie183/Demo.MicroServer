@@ -66,7 +66,7 @@ namespace Demo.MicroService.AuthenticationCenter.Controllers
             Console.WriteLine($"This is Login name={name} password={password}  TenantCode={TenantCode}");
             var customerUrl = _iConfiguration["CustomerServiceUrl"];
             var userUrl = _iConfiguration["UserServiceUrl"];
-            var result = this._httpAPIInvoker.InvokeApi(customerUrl+"api/Tenant/QueryTenant?tenantCode=" + TenantCode);
+            var result = this._httpAPIInvoker.InvokeApi(customerUrl+"api/Tenant/QueryTenantId?tenantCode=" + TenantCode);
             var tenant = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseResult<Guid>>(result);
             if (tenant.IsNullT() || !tenant.IsSuccess)
                 return JsonConvert.SerializeObject(new ResponseResult<string>()

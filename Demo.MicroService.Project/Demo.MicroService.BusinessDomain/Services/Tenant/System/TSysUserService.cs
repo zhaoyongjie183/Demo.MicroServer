@@ -5,6 +5,8 @@ using Demo.MicroService.Core.HttpApiExtend;
 using Demo.MicroService.Core.Model;
 using Demo.MicroService.Core.Utils;
 using Demo.MicroService.Repository.IRepository.ITenantRepository.ISystem;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 /**
 *┌──────────────────────────────────────────────────────────────┐
@@ -24,10 +26,14 @@ namespace Demo.MicroService.BusinessDomain.Services.Tenant.System
     {
         private ITSysUserRepository _sysUserRepository;
         private IHttpAPIInvoker _httpAPIInvoker;
-        public TSysUserService(ITSysUserRepository tSysUserRepository, IHttpAPIInvoker httpAPIInvoker)
+        private IConfiguration _configuration;
+        private ILogger<TSysUserService> _logerr;
+        public TSysUserService(ITSysUserRepository tSysUserRepository, IHttpAPIInvoker httpAPIInvoker, IConfiguration configuration, ILogger<TSysUserService> logger)
         {
             _sysUserRepository = tSysUserRepository;
             _httpAPIInvoker = httpAPIInvoker;
+            _configuration = configuration;
+            _logerr = logger;
         }
 
         /// <summary>
@@ -57,7 +63,9 @@ namespace Demo.MicroService.BusinessDomain.Services.Tenant.System
         /// <exception cref="NotImplementedException"></exception>
         public async Task<ResponseResult> QuerySysUser(string name, string password, string tenantCode)
         {
-            var result = _httpAPIInvoker.InvokeApi("http://localhost:5010/api/Tenant/QueryTenant?tenantCode=" + tenantCode);
+            var customerUrl = _configuration["CustomerServiceUrl"];
+            _logerr.LogInformation("CustomerServiceUrl:【" + customerUrl + "】");
+            var result = _httpAPIInvoker.InvokeApi(customerUrl + "api/Tenant/QueryTenantId?tenantCode=" + tenantCode);
             var tenant = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseResult<Guid>>(result);
             if (tenant.IsNullT() || !tenant.IsSuccess)
                 return new ResponseResult() { IsSuccess = false, Message = "租户不存在" };
@@ -111,7 +119,7 @@ namespace Demo.MicroService.BusinessDomain.Services.Tenant.System
         /// <returns></returns>
         public async Task<ResponseResult> RegisterUser(TSysUser model, string tenantCode)
         {
-            var result = _httpAPIInvoker.InvokeApi("http://localhost:5010/api/Tenant/QueryTenant?tenantCode=" + tenantCode);
+            var result = _httpAPIInvoker.InvokeApi("http://localhost:5010/api/Tenant/QueryTenantId?tenantCode=" + tenantCode);
             var tenant = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseResult<Guid>>(result);
             if (tenant.IsNullT() || !tenant.IsSuccess)
                 return new ResponseResult() { IsSuccess = false, Message = "租户不存在" };

@@ -30,6 +30,6 @@ namespace Demo.MicroService.BusinessDomain.IServices.IMange
         /// <returns></returns>
         Task<ResponseResult> UpdateCustomer(MangeTenant mangeTenant);
 
-        Task<ResponseResult> QueryTenant(string TenantCode);
+        Task<ResponseResult> QueryTenantId(string TenantCode);
     }
 }

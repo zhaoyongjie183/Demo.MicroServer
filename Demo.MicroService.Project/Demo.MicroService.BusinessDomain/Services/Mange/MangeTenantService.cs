@@ -52,7 +52,7 @@ namespace Demo.MicroService.BusinessDomain.Services.Mange
         /// <param name="mangeTenant"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public async Task<ResponseResult> QueryTenant(string TenantCode)
+        public async Task<ResponseResult> QueryTenantId(string TenantCode)
         {
             var old = await this._mangeTenantRepository.Queryable().FirstAsync(x => x.TenantCode == TenantCode);
             return old.IsNullT() ? new ResponseResult() { IsSuccess = false } : new ResponseResult<Guid>() { IsSuccess = true, DataResult = old.MTenantID };

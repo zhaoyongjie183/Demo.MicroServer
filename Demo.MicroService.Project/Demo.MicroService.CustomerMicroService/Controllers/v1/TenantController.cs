@@ -64,9 +64,9 @@ namespace Demo.MicroService.CustomerMicroService.Controllers.v1
         /// <param name="tenantCode"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ResponseResult> QueryTenant(string tenantCode)
+        public async Task<ResponseResult> QueryTenantId(string tenantCode)
         { 
-            return await _mangeTenantService.QueryTenant(tenantCode);
+            return await _mangeTenantService.QueryTenantId(tenantCode);
         }
     }
 }
