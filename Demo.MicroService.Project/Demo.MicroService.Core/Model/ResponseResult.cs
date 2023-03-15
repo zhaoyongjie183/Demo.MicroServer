@@ -17,7 +17,7 @@ namespace Demo.MicroService.Core.Model
         /// <summary>
         /// 状态码  无明确意义  前端用Result
         /// </summary>
-        public int StatusCode { get; set; }
+        public int StatusCode { get; set; } = 200;
 
         /// <summary>
         ///     操作结果
