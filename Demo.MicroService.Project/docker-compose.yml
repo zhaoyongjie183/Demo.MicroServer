@@ -1,0 +1,29 @@
+version: '3.3'
+services:
+  customermicroserviceapi:
+    build:
+      context: /dotnetpublish/Demo.MicroService.Project/
+      dockerfile: /dotnetpublish/Demo.MicroService.Project/Demo.MicroService.CustomerMicroService/Dockerfile
+    image: customermicroserviceapi.v0315
+    ports:
+      - 5010:80/tcp
+    container_name: "customermicroserviceapi"
+    command: "dotnet /app/Demo.MicroService.CustomerMicroService.dll"
+  usermicroserviceapi:
+    build:
+      context: /dotnetpublish/Demo.MicroService.Project/
+      dockerfile: /dotnetpublish/Demo.MicroService.Project/Demo.MicroService.UserMicroservice/Dockerfile
+    image: usermicroserviceapi.v0315
+    ports:
+      - 5001:80/tcp
+    container_name: "usermicroserviceapi"
+    command: "dotnet /app/Demo.MicroService.UserMicroservice.dll" 
+  projectmicroserviceapi:
+    build:
+      context: /dotnetpublish/Demo.MicroService.Project/
+      dockerfile: /dotnetpublish/Demo.MicroService.Project/Demo.MicroService.ProjectMicroService/Dockerfile
+    image: projectmicroserviceapi.v0315
+    ports:
+      - 5020:80/tcp
+    container_name: "projectmicroserviceapi"
+    command: "dotnet /app/Demo.MicroService.ProjectMicroService.dll"
