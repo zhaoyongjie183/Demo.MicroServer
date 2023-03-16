@@ -1,4 +1,4 @@
-# handday.scrm crm平台产品线开发架构说明文档
+# Demo.MicroService平台产品线开发架构说明文档
 + 整体采用简洁的CRUD多层架构风格；
 + 每个服务使用目录分层即不再新建类库；
 + 消息队列RabbitMQ 
