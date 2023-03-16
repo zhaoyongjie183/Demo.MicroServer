@@ -96,7 +96,7 @@ Program中存放应用启动所需配置项，一般来讲文件相对固定
   </appender>
   <appender name="KafkaAppender" type="Demo.MicroService.Core.KafkaAppender, Demo.MicroService.Core">
     <KafkaSettings>
-      <broker value="192.168.11.49:9092" />
+      <broker value="kafkaip地址" />
       <topic value="log-elk" />
     </KafkaSettings>
     <layout type="Demo.MicroService.Core.KafkaLogLayout,Demo.MicroService.Core." >
@@ -105,7 +105,7 @@ Program中存放应用启动所需配置项，一般来讲文件相对固定
   </appender>
   <appender name="MongodbAppender" type="Demo.MicroService.Core.MongodbAppender, Demo.MicroService.Core.">
     <MongodbSettings>
-      <MongodbServer value="mongodb://192.168.11.49:27017" />
+      <MongodbServer value="MongoDB连接地址" />
       <DbName value="handday_logs" />
     </MongodbSettings>
     <layout type="Demo.MicroService.Core.MongodbLogLayout,Demo.MicroService.Core." >
