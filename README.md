@@ -63,11 +63,11 @@ Program中存放应用启动所需配置项，一般来讲文件相对固定，�
     //...
 ```
 ##### 日志的配置文件log4net.config
+
 ```js
 <?xml version="1.0" encoding="utf-8" ?>
 <log4net>
   <!--源码地址：https://github.com/apache/logging-log4net-->
-  
   <appender name="RollingFileAppender" type="log4net.Appender.RollingFileAppender">
     <file type="log4net.Util.PatternString">
       <converter>
@@ -112,8 +112,6 @@ Program中存放应用启动所需配置项，一般来讲文件相对固定，�
     <appender-ref ref="RollingFileAppender"/>
   </root>
 </log4net>
-
-
 
 ```
 ##### 打印日志
