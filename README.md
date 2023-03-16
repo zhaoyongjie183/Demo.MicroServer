@@ -34,16 +34,21 @@
 + Demo.MicroService.Repository.Repository 仓储实现类
 + DTO和Model 数据映射采用ValueInjection
 + 仓储接口统一存放到Demo.MicroService.Repository.IRepository目录中
+
 #### Entities 实体层
 + 实体统一存放到Demo.MicroService.BusinessModel，不再使用目录区分；
+
 #### Services 业务逻辑层
 + Demo.MicroService.BusinessDomain.Server 业务层实现类
 + 业务层接口统一存放到Demo.MicroService.BusinessDomain.IServer目录中
+
 #### Models视图模型层（存放数据传输对象）
 + Demo.MicroService.BusinessModel.Dto 存放数据传输对象
 + Dto子目录为不同实体对应的DTO对象，目录名称推荐使用实体类名称；
+
 #### Controllers Api接口
 存放服务中所有的Controller，不再使用目录区分；
+
 #### ServiceSetup
 Program中存放应用启动所需配置项，一般来讲文件相对固定，如下：
 
