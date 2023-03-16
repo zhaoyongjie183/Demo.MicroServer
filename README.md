@@ -258,6 +258,7 @@ Program中存放应用启动所需配置项，一般来讲文件相对固定，�
 	builder.Configuration.AddNacosV2Configuration(builder.Configuration.GetSection("NacosConfig"));
 	#endregion
 ```
+
 + 在程序中通过IConfiguration读取配置
 ```js
 var capConfig = System.Text.Json.JsonSerializer.Deserialize<MicroServiceCommon.ServiceSetup.CAP.RabbitMQ>(Configuration.GetSection("CAP").Value);
@@ -321,7 +322,7 @@ var capConfig = System.Text.Json.JsonSerializer.Deserialize<MicroServiceCommon.S
 + 4） 删除的方法用 delete/{id} 格式，例如：api/user/delete/1。 
 + 5） 修改的方法用 update 格式，例如：api/user/update。 
 + 6） 如果出现多个单词时，例如：api/externalcontact/get_unassigned_list
-+ B) Services/Respositories 层方法命名规约 
++ B) Services/Repository 层方法命名规约 
 + 1） 获取单个对象的方法用 Get 做前缀，例如：GetUser。 
 + 2） 获取多个对象的方法用 GetXXXList 格式，例如：GetUserList。
 + 3） 获取分页数据的方法用GetXXXPagedList格式，例如：GetUserPagedList 
