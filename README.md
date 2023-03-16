@@ -154,6 +154,7 @@ Program中存放应用启动所需配置项，一般来讲文件相对固定
   ```
 #### :mushroom: 添加 SqlSugarCore
 - 添加Demo.MicroService.Core项目引用；
+
 #### :mushroom: 接入统一身份认证中心
 - 服务器安装Microsoft.AspNetCore.Authentication.JwtBearer包；
 - 添加JWT支持： builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>{});
@@ -163,6 +164,7 @@ Program中存放应用启动所需配置项，一般来讲文件相对固定
   > builder.Services.AddScoped<IUser, AspNetUser>();
 - 如何获取当前用户的信息？
   > 在需要获取用户信息类中使用ApplicationContext即可；
+  
 #### :mushroom: 使用Swagger生成在线接口文档
 + 添加builder.AddSwaggerGenExt();和app.UseSwaggerExt();
 + 多版本控制：在controller上面添加 [ApiVersion("2")]
@@ -238,6 +240,7 @@ Program中存放应用启动所需配置项，一般来讲文件相对固定
 ```
 + 判断请求成功与否，请使用statusCode，只有statusCode等于200时才表示正常请求成功；
 + statusCode遵守标准HTTP状态码；
+
 #### :mushroom: 统一异常处理
 + 统一异常处理功能
 + 添加全局属常自动处理功能
