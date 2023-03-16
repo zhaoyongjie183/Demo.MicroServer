@@ -70,6 +70,7 @@ namespace Demo.MicroService.Repository.Repository.TenantRepository
                     }
                 });
             }
+            _logger.LogInformation($"数据库链接: {dbContext.CurrentConnectionConfig.ConnectionString}");
             _db = dbContext;
             _db.Ado.IsEnableLogEvent = true;
             //SQL执行前事件
