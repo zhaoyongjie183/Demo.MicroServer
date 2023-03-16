@@ -152,9 +152,24 @@ Program中存放应用启动所需配置项，一般来讲文件相对固定
         _logger.LogInformation("enter pagelist method...");
     }
   ```
-#### :mushroom: 添加 SqlSugarCore
+#### :mushroom: 添加 ORM框架Sqlsugar
 - 添加Demo.MicroService.Core项目引用；
+- 添加引用builder.Services.AddSqlSugarClient<SqlSugarClient>
 
+```js
+#region Orm
+var sqlSugarConfig = SqlSugarConfig.GetConnectionString(builder.Configuration);
+builder.Services.AddSqlSugarClient<SqlSugarClient>(config =>
+{
+    config.ConnectionString = sqlSugarConfig.Item2;
+    config.DbType = sqlSugarConfig.Item1;
+    config.IsAutoCloseConnection = true;
+    config.InitKeyType = InitKeyType.Attribute;
+    //config.IsShardSameThread = true;
+});
+#endregion
+  ```
+  
 #### :mushroom: 接入统一身份认证中心
 - 服务器安装Microsoft.AspNetCore.Authentication.JwtBearer包；
 - 添加JWT支持： builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>{});
