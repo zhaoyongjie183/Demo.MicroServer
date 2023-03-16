@@ -263,6 +263,7 @@ builder.Services.AddSqlSugarClient<SqlSugarClient>(config =>
 
 #### :mushroom: 链路跟踪&性能监控
 + DEMO暂未实现，实现思路就是：搭建skywalking环境，然后添加skyapm.json配置文件，然后nuget包SkyAPM.Agent.AspNetCore。注册builder.Services.AddSkyApmExtensions(); // 添加Skywalking相关配置
+
 #endregion 
 
 #### :mushroom: 配置中心
