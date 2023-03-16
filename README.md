@@ -13,13 +13,21 @@
 + 服务通信：http通信，采用json格式
 + 部署：docker-compose 多环境都可以
 + 分布式事务：CAP
+
+
 ### :mushroom: 整体介绍
-#### src目录
+
+
+### src目录
 + src目录为源码存放位置，零售产品线每个服务都保存在此目录中，彼此为平行关系；
 + 服务命名规范：Demo.MicroService.{ServiceName}Api，其中ServiceName为服务名称，如：Demo.MicroService.CustomerApi；
-#### test目录
+
+
+### test目录
 + test目录为单元测试存放目录，每个服务对应一个单元测试项目；
 + 单元测试命名规范：Demo.MicroService.{ServiceName}Api.Test，其中ServiceName为服务名称，如：Demo.MicroService.CustomerApi.Test；
+
+
 ### :mushroom: 目录结构
 #### Repositories 仓储层
 + Context 数据库SqlSugarClient
