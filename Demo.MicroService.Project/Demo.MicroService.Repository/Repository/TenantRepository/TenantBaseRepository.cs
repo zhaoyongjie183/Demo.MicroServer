@@ -35,24 +35,41 @@ namespace Demo.MicroService.Repository.Repository.TenantRepository
         public TenantBaseRepository(SqlSugarClient dbContext) : base(dbContext)
         {
             var _logger = EngineContext.ServiceProvider.GetRequiredService<ILogger<SqlSugarClient>>();
-            var httpAPIInvoker = EngineContext.ServiceProvider.GetRequiredService<IHttpAPIInvoker>();
-            var configuration = EngineContext.ServiceProvider.GetRequiredService<IConfiguration>();
-            var customerUrl = configuration["CustomerServiceUrl"];
-            var result = httpAPIInvoker.InvokeApi(customerUrl + "api/Tenant/QueryTenantConneString?tenantId=" + ApplicationContext.User.MTenantId);
-            var sqlconne = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseResult<SqlConneModel>>(result);
-            if (sqlconne.IsNullT() || !sqlconne.IsSuccess || sqlconne.DataResult.IsNullT() || string.IsNullOrEmpty(sqlconne.DataResult.SqlConnectionString))
-                throw new UserThrowException("数据库链接异常");
-
-            dbContext = new SqlSugarClient(new ConnectionConfig()
+            if (ApplicationContext.User.MTenantId == Guid.Empty)
             {
-                ConnectionString = sqlconne.DataResult.SqlConnectionString,
-                DbType = sqlconne.DataResult.DbType,
-                IsAutoCloseConnection = true,
-                ConfigureExternalServices = new ConfigureExternalServices
+                dbContext = new SqlSugarClient(new ConnectionConfig()
                 {
-                    SqlFuncServices = SqlSugarConfig.GetLambda(),
-                }
-            });
+                    ConnectionString = "Data Source=192.168.1.6;Initial Catalog=DemoMicroService;User ID=cdms_admin;Password=fZ`glh_m",
+                    DbType = SqlSugar.DbType.SqlServer,
+                    IsAutoCloseConnection = true,
+                    ConfigureExternalServices = new ConfigureExternalServices
+                    {
+                        SqlFuncServices = SqlSugarConfig.GetLambda(),
+                    }
+                });
+            }
+            else
+            {
+             
+                var httpAPIInvoker = EngineContext.ServiceProvider.GetRequiredService<IHttpAPIInvoker>();
+                var configuration = EngineContext.ServiceProvider.GetRequiredService<IConfiguration>();
+                var customerUrl = configuration["CustomerServiceUrl"];
+                var result = httpAPIInvoker.InvokeApi(customerUrl + "api/Tenant/QueryTenantConneString?tenantId=" + ApplicationContext.User.MTenantId);
+                var sqlconne = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseResult<SqlConneModel>>(result);
+                if (sqlconne.IsNullT() || !sqlconne.IsSuccess || sqlconne.DataResult.IsNullT() || string.IsNullOrEmpty(sqlconne.DataResult.SqlConnectionString))
+                    throw new UserThrowException("数据库链接异常");
+
+                dbContext = new SqlSugarClient(new ConnectionConfig()
+                {
+                    ConnectionString = sqlconne.DataResult.SqlConnectionString,
+                    DbType = sqlconne.DataResult.DbType,
+                    IsAutoCloseConnection = true,
+                    ConfigureExternalServices = new ConfigureExternalServices
+                    {
+                        SqlFuncServices = SqlSugarConfig.GetLambda(),
+                    }
+                });
+            }
             _db = dbContext;
             _db.Ado.IsEnableLogEvent = true;
             //SQL执行前事件
