@@ -249,6 +249,7 @@ Program中存放应用启动所需配置项，一般来讲文件相对固定，�
 + 登陆nacos新增命名空间
 + 在命名空间只能添加配置
 + 在Program中接入
+
 ```js
 	#region Nacos配置
 	// 注册服务到Nacos
