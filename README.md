@@ -50,7 +50,7 @@
 存放服务中所有的Controller，不再使用目录区分；
 
 #### ServiceSetup
-Program中存放应用启动所需配置项，一般来讲文件相对固定，如下：
+Program中存放应用启动所需配置项，一般来讲文件相对固定
 
 #### :mushroom:  快速开始
 
