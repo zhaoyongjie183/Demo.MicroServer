@@ -30,6 +30,18 @@ namespace Demo.MicroService.BusinessDomain.IServices.IMange
         /// <returns></returns>
         Task<ResponseResult> UpdateCustomer(MangeTenant mangeTenant);
 
+        /// <summary>
+        /// 获取租户ID
+        /// </summary>
+        /// <param name="TenantCode"></param>
+        /// <returns></returns>
         Task<ResponseResult> QueryTenantId(string TenantCode);
+
+        /// <summary>
+        /// 获取租户链接
+        /// </summary>
+        /// <param name="TenantCode"></param>
+        /// <returns></returns>
+        Task<ResponseResult> QueryTenantConneString(Guid tenantId);
     }
 }

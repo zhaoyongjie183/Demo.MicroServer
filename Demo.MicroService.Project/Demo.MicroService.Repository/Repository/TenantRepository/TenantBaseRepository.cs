@@ -10,6 +10,10 @@ using Demo.MicroService.Core.Infrastructure;
 using Demo.MicroService.Core.Application;
 using NPOI.SS.Formula.Functions;
 using Microsoft.Extensions.DependencyInjection;
+using Demo.MicroService.Core.HttpApiExtend;
+using Microsoft.Extensions.Configuration;
+using MathNet.Numerics.RootFinding;
+using Demo.MicroService.Core.Utils;
 
 /**
 *┌──────────────────────────────────────────────────────────────┐
@@ -25,15 +29,24 @@ using Microsoft.Extensions.DependencyInjection;
 */
 namespace Demo.MicroService.Repository.Repository.TenantRepository
 {
-    public class TenantBaseRepository<TEntity> : BaseRepository<TEntity>,ITenantBaseRepository<TEntity> where TEntity : BaseEntity, new()
+    public class TenantBaseRepository<TEntity> : BaseRepository<TEntity>, ITenantBaseRepository<TEntity> where TEntity : BaseEntity, new()
     {
-       
+
         public TenantBaseRepository(SqlSugarClient dbContext) : base(dbContext)
         {
             var _logger = EngineContext.ServiceProvider.GetRequiredService<ILogger<SqlSugarClient>>();
-            dbContext = new SqlSugarClient(new ConnectionConfig() {
-                ConnectionString = "Data Source=192.168.1.6;Initial Catalog=DemoMicroService;User ID=cdms_admin;Password=fZ`glh_m",
-                DbType = SqlSugar.DbType.SqlServer,
+            var httpAPIInvoker = EngineContext.ServiceProvider.GetRequiredService<IHttpAPIInvoker>();
+            var configuration = EngineContext.ServiceProvider.GetRequiredService<IConfiguration>();
+            var customerUrl = configuration["CustomerServiceUrl"];
+            var result = httpAPIInvoker.InvokeApi(customerUrl + "api/Tenant/QueryTenantConneString?tenantId=" + ApplicationContext.User.MTenantId);
+            var sqlconne = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseResult<SqlConneModel>>(result);
+            if (sqlconne.IsNullT() || !sqlconne.IsSuccess || sqlconne.DataResult.IsNullT() || string.IsNullOrEmpty(sqlconne.DataResult.SqlConnectionString))
+                throw new UserThrowException("数据库链接异常");
+
+            dbContext = new SqlSugarClient(new ConnectionConfig()
+            {
+                ConnectionString = sqlconne.DataResult.SqlConnectionString,
+                DbType = sqlconne.DataResult.DbType,
                 IsAutoCloseConnection = true,
                 ConfigureExternalServices = new ConfigureExternalServices
                 {

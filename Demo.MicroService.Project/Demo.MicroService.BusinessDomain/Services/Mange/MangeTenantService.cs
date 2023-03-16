@@ -3,6 +3,7 @@ using Demo.MicroService.BusinessModel.Model.Mange;
 using Demo.MicroService.Core.Model;
 using Demo.MicroService.Core.Utils;
 using Demo.MicroService.Repository.IRepository.IMangeRepository;
+using SqlSugar;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -77,6 +78,57 @@ namespace Demo.MicroService.BusinessDomain.Services.Mange
             mangeTenant.UpdatedTime= DateTime.Now;
             var result = await this._mangeTenantRepository.UpdateAsync(mangeTenant);
             return new ResponseResult() { IsSuccess = result, Message = result ? "新增成功" : "新增失败" };
+        }
+
+        /// <summary>
+        /// 获取租户链接
+        /// </summary>
+        /// <param name="TenantCode"></param>
+        /// <returns></returns>
+        public async Task<ResponseResult> QueryTenantConneString(Guid tenantId)
+        {
+            var old = await this._mangeTenantRepository.Queryable().FirstAsync(x => x.MTenantID == tenantId);
+            if (old.IsNullT())
+                return new ResponseResult() { IsSuccess = false };
+            else
+            {
+                SqlConneModel sqlConneModel = new SqlConneModel();
+                var dbType = old.TenantDBType.ToEnum<DbType>();
+                switch (dbType)
+                {
+                    case DbType.MySql:
+                        sqlConneModel.DbType = DbType.MySql;
+                        sqlConneModel.SqlConnectionString = $"server={old.DBIP};database={old.DBName};port={old.DBPort};uid={old.DBUser};pwd={old.DBPwd};charset='utf8'";
+                        break;
+
+                    case DbType.SqlServer:
+                        sqlConneModel.DbType = DbType.SqlServer;
+                        sqlConneModel.SqlConnectionString = $"server={old.DBIP};user id={old.DBUser};password={old.DBPwd};database={old.DBName}";
+                        break;
+
+                    case DbType.Sqlite:
+                        sqlConneModel.DbType = DbType.Sqlite;
+                        sqlConneModel.SqlConnectionString = $"Data Source={old.DBName};Version=3;Password={old.DBPwd}";
+                        break;
+
+                    case DbType.Oracle:
+                        sqlConneModel.DbType = DbType.Oracle;
+                        sqlConneModel.SqlConnectionString = $"User ID={old.DBUser};Password={old.DBPwd};Data Source=(DESCRIPTION = (ADDRESS_LIST=(ADDRESS=(PROTOCOL = TCP)(HOST = {old.DBIP})(PORT = {old.DBPort})))(CONNECT_DATA = (SERVICE_NAME = {old.DBName})))";
+                        break;
+
+                    case DbType.PostgreSQL:
+                        sqlConneModel.DbType = DbType.PostgreSQL;
+                        sqlConneModel.SqlConnectionString = $"Host={old.DBIP};Port={old.DBPort};Username={old.DBUser};Password={old.DBPwd};Database={old.DBName}";
+                        break;
+
+                    default:
+                        sqlConneModel.DbType = DbType.MySql;
+                        sqlConneModel.SqlConnectionString = $"server={old.DBIP};database={old.DBName};port={old.DBPort};uid={old.DBUser};pwd={old.DBPwd};charset='utf8'";
+                        break;
+                }
+                return  new ResponseResult<SqlConneModel>() { IsSuccess = true, DataResult = sqlConneModel };
+            }
+
         }
     }
 }
