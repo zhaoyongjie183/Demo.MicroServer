@@ -1,10 +1,12 @@
 ﻿using Demo.MicroService.BusinessDomain.IServices.ITenant.ISystem;
 using Demo.MicroService.BusinessModel.DTO.Tenant.System;
 using Demo.MicroService.BusinessModel.Model.Tenant.System;
+using Demo.MicroService.Core.Application;
 using Demo.MicroService.Core.Model;
 using Demo.MicroService.Core.Utils;
 using Demo.MicroService.Core.Utils.Excel;
 using Demo.MicroService.Core.ValInject;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Omu.ValueInjecter;
@@ -102,7 +104,32 @@ namespace Demo.MicroService.UserMicroservice.Controllers.v2
             if (result.IsNullT() || result.DataResult.IsNullT())
                 return new JsonResult(new ResponseResult() { IsSuccess = false, Message = "导出失败" });
             var buffer = NpoiUtil.Export(result.DataResult);
-             return File(buffer, "application/octet-stream", DateTime.Now.ToString() + "-" + HttpUtility.UrlEncode("物料") + ".xlsx");
+             return File(buffer, "application/octet-stream", DateTime.Now.ToString() + "-" + HttpUtility.UrlEncode("客户") + ".xlsx");
+        }
+
+        /// <summary>
+        /// 客户导入
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+       // [Authorize]
+        public async Task<IActionResult> ImportSysUser(IFormFile file)
+        {
+            if (file == null || file.Length <= 0)
+                return new JsonResult(new ResponseResult() { IsSuccess = false, Message = "未查询到导入数据" });
+            string fileExt = Path.GetExtension(file.FileName).ToLower();
+            if (!NpoiUtil.excel.Contains(fileExt))
+            {
+                return new JsonResult(new ResponseResult() { IsSuccess = false, Message = "文件不存在" });
+            }
+            var filepath = Path.Combine(Directory.GetCurrentDirectory(), "upload", Guid.NewGuid().ToString()) + fileExt;
+            using (var st = new MemoryStream())
+            {
+                file.CopyTo(st);
+                var dt = NpoiUtil.Import(st, fileExt);
+                return new JsonResult(new ResponseResult() { IsSuccess = true, Message = JsonHelper.DataTableToJSON(dt) });
+            }
+            
         }
         /// <summary>
         /// 查询用户信息
