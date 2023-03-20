@@ -6,7 +6,7 @@ namespace XUnitTestDemoMicroService
     public class JsonTest
     {
         [Fact]
-        public void Test1()
+        public void TestJson()
         {
             var a=new { name="ssss",age=18};
             var c=JsonHelper.ObjectToJSON(a);
