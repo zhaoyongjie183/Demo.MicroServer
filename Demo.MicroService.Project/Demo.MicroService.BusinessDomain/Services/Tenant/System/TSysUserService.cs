@@ -7,6 +7,7 @@ using Demo.MicroService.Core.Utils;
 using Demo.MicroService.Repository.IRepository.ITenantRepository.ISystem;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using SqlSugar;
 
 /**
 *┌──────────────────────────────────────────────────────────────┐
@@ -150,6 +151,19 @@ namespace Demo.MicroService.BusinessDomain.Services.Tenant.System
             var result = await _sysUserRepository.UpdateAsync(model);
 
             return new ResponseResult() { IsSuccess = result, Message = result ? "修改成功" : "修改失败" };
+        }
+
+
+        /// <summary>
+        /// 分页查询数据
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public async Task<PageResult<TSysUser>> PageQueryUser(int pageIndex, int pageSize)
+        {
+            RefAsync<int> total = 0;
+            var data=await _sysUserRepository.Queryable().OrderBy(" TSysUserID asc ").ToPageListAsync(pageIndex, pageSize, total);
+            return new PageResult<TSysUser>(pageIndex, total, pageSize,data);
         }
     }
 }

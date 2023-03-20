@@ -68,6 +68,19 @@ namespace Demo.MicroService.UserMicroservice.Controllers.v2
         }
 
         /// <summary>
+        /// 分页查询数据
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize]
+
+        public async Task<PageResult<TSysUser>> PageQueryUser(int pageIndex = 1,int pageSize=10)
+        {
+            return await _tSysUserService.PageQueryUser(pageIndex, pageSize);
+        }
+
+        /// <summary>
         /// 查询用户信息
         /// </summary>
         /// <param name="id"></param>

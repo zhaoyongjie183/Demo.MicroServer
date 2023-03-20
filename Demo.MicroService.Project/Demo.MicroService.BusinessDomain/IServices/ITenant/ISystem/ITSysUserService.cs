@@ -23,6 +23,12 @@ namespace Demo.MicroService.BusinessDomain.IServices.ITenant.ISystem
     public interface ITSysUserService : IBaseServices
     {
         /// <summary>
+        /// 分页查询
+        /// </summary>
+        /// <returns></returns>
+        Task<PageResult<TSysUser>> PageQueryUser(int pageIndex,int pageSize);
+
+        /// <summary>
         /// 查询客户信息
         /// </summary>
         /// <param name="id"></param>
