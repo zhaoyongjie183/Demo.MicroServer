@@ -116,6 +116,7 @@ namespace Demo.MicroService.UserMicroservice.Controllers.v2
             var result= await _tSysUserService.QueryUser();
             if (result.IsNullT() || result.DataResult.IsNullT())
                 return new JsonResult(new ResponseResult() { IsSuccess = false, Message = "导出失败" });
+            _logger.LogInformation("客户数据【" + JsonHelper.ObjectToJSON(result.DataResult) + "】");
             var buffer = NpoiUtil.Export(result.DataResult);
              return File(buffer, "application/octet-stream", DateTime.Now.ToString() + "-" + HttpUtility.UrlEncode("客户") + ".xlsx");
         }

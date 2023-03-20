@@ -315,7 +315,7 @@ namespace Demo.MicroService.Core.Utils.Excel
                         cell.SetCellValue(id);
                     }
                 }
-                AutoSizeColumns(sheet);
+                //AutoSizeColumns(sheet);
             }
             MemoryStream stream = new MemoryStream();
             workbook.Write(stream, true);
