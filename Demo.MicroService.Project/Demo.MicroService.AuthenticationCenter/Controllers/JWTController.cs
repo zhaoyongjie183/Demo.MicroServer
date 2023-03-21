@@ -61,12 +61,12 @@ namespace Demo.MicroService.AuthenticationCenter.Controllers
         /// <returns></returns>
         [Route("Login")]
         [HttpPost]
-        public string Login(string name, string password, string TenantCode)
+        public string Login([FromBody] LoginModel loginModel)
         {
-            Console.WriteLine($"This is Login name={name} password={password}  TenantCode={TenantCode}");
+            Console.WriteLine($"This is Login name={loginModel.name} password={loginModel.password}  TenantCode={loginModel.TenantCode}");
             var customerUrl = _iConfiguration["CustomerServiceUrl"];
             var userUrl = _iConfiguration["UserServiceUrl"];
-            var result = this._httpAPIInvoker.InvokeApi(customerUrl+"api/Tenant/QueryTenantId?tenantCode=" + TenantCode);
+            var result = this._httpAPIInvoker.InvokeApi(customerUrl+"api/Tenant/QueryTenantId?tenantCode=" + loginModel.TenantCode);
             var tenant = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseResult<Guid>>(result);
             if (tenant.IsNullT() || !tenant.IsSuccess)
                 return JsonConvert.SerializeObject(new ResponseResult<string>()
@@ -76,7 +76,7 @@ namespace Demo.MicroService.AuthenticationCenter.Controllers
                     DataResult = ""
 
                 });
-            result = this._httpAPIInvoker.InvokeApi(userUrl+"api/User/QuerySysUser?name=" + name + "&password=" + password + "&tenantCode=" + TenantCode,"2");
+            result = this._httpAPIInvoker.InvokeApi(userUrl+"api/User/QuerySysUser?name=" + loginModel.name + "&password=" + loginModel.password + "&tenantCode=" + loginModel.TenantCode, "2");
             var user = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseResult<TSysUser>>(result);
             if (user.IsNullT() || !user.IsSuccess)
                 return JsonConvert.SerializeObject(new ResponseResult<string>()
