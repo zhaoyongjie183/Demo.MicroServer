@@ -18,6 +18,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Nacos.V2.Naming.Dtos;
+using SkyApm.Utilities.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,6 +37,9 @@ builder.Services.AddNacosAspNet(builder.Configuration, section: "NacosConfig"); 
 builder.Configuration.AddNacosV2Configuration(builder.Configuration.GetSection("NacosConfig"));
 #endregion
 
+#region Skywalking≈‰÷√
+builder.Services.AddSkyApmExtensions();
+#endregion
 #region jwt–£—È  HS
 JWTTokenOptions tokenOptions = new JWTTokenOptions();
 builder.Configuration.Bind(JWTTokenOptions.JWTTokenOption, tokenOptions);
