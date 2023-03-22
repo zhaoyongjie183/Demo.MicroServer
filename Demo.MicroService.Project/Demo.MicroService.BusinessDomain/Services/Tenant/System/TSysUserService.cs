@@ -124,8 +124,10 @@ namespace Demo.MicroService.BusinessDomain.Services.Tenant.System
         /// <returns></returns>
         public async Task<ResponseResult> RegisterUser(TSysUser model, string tenantCode)
         {
-            var customerUrl = _configuration["CustomerServiceUrl"];
-            var result = _httpAPIInvoker.InvokeApi(customerUrl+"api/Tenant/QueryTenantId?tenantCode=" + tenantCode);
+            var customerUrl = _configuration["CustomerServiceUrl"] + "api/Tenant/QueryTenantId?tenantCode=" + tenantCode;
+            string realUrl = this._abstractConsulDispatcher.MapAddress(customerUrl);
+            _logerr.LogInformation("realUrl:【" + realUrl + "】");
+            var result = _httpAPIInvoker.InvokeApi(realUrl);
             var tenant = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseResult<Guid>>(result);
             if (tenant.IsNullT() || !tenant.IsSuccess)
                 return new ResponseResult() { IsSuccess = false, Message = "租户不存在" };

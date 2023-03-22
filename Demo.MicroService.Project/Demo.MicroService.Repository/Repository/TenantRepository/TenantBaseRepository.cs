@@ -14,6 +14,7 @@ using Demo.MicroService.Core.HttpApiExtend;
 using Microsoft.Extensions.Configuration;
 using MathNet.Numerics.RootFinding;
 using Demo.MicroService.Core.Utils;
+using Demo.MicroService.Core.ConsulExtend.DispatcherExtend;
 
 /**
 *┌──────────────────────────────────────────────────────────────┐
@@ -53,8 +54,11 @@ namespace Demo.MicroService.Repository.Repository.TenantRepository
              
                 var httpAPIInvoker = EngineContext.ServiceProvider.GetRequiredService<IHttpAPIInvoker>();
                 var configuration = EngineContext.ServiceProvider.GetRequiredService<IConfiguration>();
-                var customerUrl = configuration["CustomerServiceUrl"];
-                var result = httpAPIInvoker.InvokeApi(customerUrl + "api/Tenant/QueryTenantConneString?tenantId=" + ApplicationContext.User.MTenantId);
+                var _abstractConsulDispatcher= EngineContext.ServiceProvider.GetRequiredService<AbstractConsulDispatcher>();
+                var customerUrl = configuration["CustomerServiceUrl"] + "api/Tenant/QueryTenantConneString?tenantId=" + ApplicationContext.User.MTenantId;
+                string realUrl = _abstractConsulDispatcher.MapAddress(customerUrl);
+                _logger.LogInformation("数据库连接realUrl:【" + realUrl + "】");
+                var result = httpAPIInvoker.InvokeApi(realUrl);
                 var sqlconne = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseResult<SqlConneModel>>(result);
                 if (sqlconne.IsNullT() || !sqlconne.IsSuccess || sqlconne.DataResult.IsNullT() || string.IsNullOrEmpty(sqlconne.DataResult.SqlConnectionString))
                     throw new UserThrowException("数据库链接异常");
