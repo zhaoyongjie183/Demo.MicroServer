@@ -10,6 +10,9 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Omu.ValueInjecter;
+using Serilog.Context;
+using SkyApm.Tracing;
+using SkyApm.Tracing.Segments;
 using System.Web;
 
 namespace Demo.MicroService.UserMicroservice.Controllers.v2
@@ -24,16 +27,17 @@ namespace Demo.MicroService.UserMicroservice.Controllers.v2
     {
         private readonly ITSysUserService _tSysUserService;
         private readonly ILogger<UserController> _logger;
-
+        private readonly IEntrySegmentContextAccessor _segContext;
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="tSysUserService"></param>
         /// <param name="logger"></param>
-        public UserController(ITSysUserService tSysUserService, ILogger<UserController> logger)
+        public UserController(ITSysUserService tSysUserService, ILogger<UserController> logger, IEntrySegmentContextAccessor segContext)
         {
             _tSysUserService = tSysUserService;
             _logger = logger;
+            _segContext = segContext;
         }
 
         /// <summary>
@@ -165,6 +169,45 @@ namespace Demo.MicroService.UserMicroservice.Controllers.v2
         public async Task<ResponseResult> GetName()
         {
             return await Task.FromResult(new ResponseResult() { Message="请求成功" });
+        }
+
+        /// <summary>
+        /// 测试链路追踪
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("test")]
+        public async Task<ResponseResult> TestSkywalking()
+        {
+            return await Task.FromResult<ResponseResult>(new ResponseResult() { Message = "TestSkywalking" });
+        }
+
+        /// <summary>
+        /// 获取链接追踪ID
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("traceId")]
+        public async Task<ResponseResult> GetSkywalkingTraceId()
+        {
+            return await Task.FromResult<ResponseResult>(new ResponseResult() { Value= _segContext.Context.TraceId }); 
+        }
+
+        /// <summary>
+        /// 自定义链路调用中的日志信息
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ResponseResult> SkywalkingLog()
+        {
+            //获取全局的skywalking的TracId
+            var TraceId = _segContext.Context.TraceId;
+            Console.WriteLine($"TraceId={TraceId}");
+            _segContext.Context.Span.AddLog(LogEvent.Message($"SkywalkingTest1---Worker running at: {DateTime.Now}"));
+
+            Thread.Sleep(1000);
+
+            _segContext.Context.Span.AddLog(LogEvent.Message($"SkywalkingTest1---Worker running at--end: {DateTime.Now}"));
+
+            return await Task.FromResult<ResponseResult>(new ResponseResult() { Message = $" Ok,SkywalkingTest1-TraceId={TraceId}" }); 
         }
     }
 }

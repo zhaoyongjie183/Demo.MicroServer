@@ -5,7 +5,9 @@
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "SkyAPM.Agent.AspNetCore", // 必须配置
+        "SKYWALKING__SERVICENAME": "SkyWalking_CustomerService" // 必须配置，在skywalking做标识
       },
       "dotnetRunMessages": true
     },
@@ -18,14 +20,7 @@
       },
       "dotnetRunMessages": true
     },
-    "IIS Express": {
-      "commandName": "IISExpress",
-      "launchBrowser": true,
-      "launchUrl": "swagger",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
-    },
+    
     "Docker": {
       "commandName": "Docker",
       "launchBrowser": true,

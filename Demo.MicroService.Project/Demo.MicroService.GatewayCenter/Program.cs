@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Ocelot.Administration;
 using System.Text.Json.Serialization;
+using SkyApm.Utilities.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,13 +22,18 @@ builder.Services.AddNacosAspNet(builder.Configuration, section: "NacosConfig"); 
 builder.Configuration.AddNacosV2Configuration(builder.Configuration.GetSection("NacosConfig"));
 #endregion
 
+#region Skywalking配置
+builder.Services.AddSkyApmExtensions();
+#endregion
+
+#region Ocelot配置
 // 添加Ocelot对应Nacos扩展
 builder.Services.AddOcelot()
     .AddConsul()
     .AddPolly()
     //此配置是用于API更新ocelot配置。
     .AddAdministration("/administration", "CIMSSecret");/*.AddNacosDiscovery()*/;
-
+#endregion
 #region jwt校验  HS
 JWTTokenOptions tokenOptions = new JWTTokenOptions();
 builder.Configuration.Bind(JWTTokenOptions.JWTTokenOption, tokenOptions);

@@ -11,6 +11,7 @@ using Demo.MicroService.BusinessDomain.IServices;
 using Demo.MicroService.BusinessDomain.Services;
 using Demo.MicroService.Core.Middleware;
 using Demo.MicroService.Core.HttpApiExtend;
+using SkyApm.Utilities.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,9 @@ builder.Services.AddNacosAspNet(builder.Configuration, section: "NacosConfig"); 
 builder.Configuration.AddNacosV2Configuration(builder.Configuration.GetSection("NacosConfig"));
 #endregion
 
+#region Skywalking≈‰÷√
+builder.Services.AddSkyApmExtensions();
+#endregion
 // Add services to the container.
 
 builder.Services.AddControllers();

@@ -15,6 +15,7 @@ using Demo.MicroService.Core.JWT;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using SkyApm.Utilities.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IUser, AspNetUser>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Logging.AddLog4Net();
+
+#region Skywalking≈‰÷√
+builder.Services.AddSkyApmExtensions();
+#endregion
 
 #region Nacos≈‰÷√
 // ◊¢≤·∑˛ŒÒµΩNacos
