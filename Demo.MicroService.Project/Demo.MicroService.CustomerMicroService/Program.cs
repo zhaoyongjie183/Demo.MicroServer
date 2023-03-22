@@ -47,6 +47,7 @@ builder.Services.AddSqlSugarClient<SqlSugarClient>(config =>
 
 #region consul
 builder.Services.AddConsulRegister(builder.Configuration);
+builder.Services.AddConsulDispatcher(ConsulDispatcherType.Polling);
 #endregion
 builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 //builder.Services.AddScoped(typeof(ITenantBaseRepository<>), typeof(TenantBaseRepository<>));

@@ -52,6 +52,7 @@ builder.Services.AddSqlSugarClient<SqlSugarClient>(config =>
 
 #region consul
 builder.Services.AddConsulRegister(builder.Configuration);
+builder.Services.AddConsulDispatcher(ConsulDispatcherType.Polling);
 #endregion
 
 #region http

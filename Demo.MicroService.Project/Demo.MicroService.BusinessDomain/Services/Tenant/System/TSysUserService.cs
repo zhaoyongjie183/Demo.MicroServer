@@ -1,6 +1,7 @@
 ﻿using Demo.MicroService.BusinessDomain.IServices.ITenant.ISystem;
 using Demo.MicroService.BusinessModel.Model.Tenant.System;
 using Demo.MicroService.Core.Application;
+using Demo.MicroService.Core.ConsulExtend.DispatcherExtend;
 using Demo.MicroService.Core.HttpApiExtend;
 using Demo.MicroService.Core.Model;
 using Demo.MicroService.Core.Utils;
@@ -29,12 +30,14 @@ namespace Demo.MicroService.BusinessDomain.Services.Tenant.System
         private IHttpAPIInvoker _httpAPIInvoker;
         private IConfiguration _configuration;
         private ILogger<TSysUserService> _logerr;
-        public TSysUserService(ITSysUserRepository tSysUserRepository, IHttpAPIInvoker httpAPIInvoker, IConfiguration configuration, ILogger<TSysUserService> logger)
+        private readonly AbstractConsulDispatcher _abstractConsulDispatcher;
+        public TSysUserService(ITSysUserRepository tSysUserRepository, IHttpAPIInvoker httpAPIInvoker, IConfiguration configuration, ILogger<TSysUserService> logger, AbstractConsulDispatcher abstractConsulDispatcher)
         {
             _sysUserRepository = tSysUserRepository;
             _httpAPIInvoker = httpAPIInvoker;
             _configuration = configuration;
             _logerr = logger;
+            _abstractConsulDispatcher = abstractConsulDispatcher;
         }
 
         /// <summary>
@@ -64,9 +67,10 @@ namespace Demo.MicroService.BusinessDomain.Services.Tenant.System
         /// <exception cref="NotImplementedException"></exception>
         public async Task<ResponseResult> QuerySysUser(string name, string password, string tenantCode)
         {
-            var customerUrl = _configuration["CustomerServiceUrl"];
+            var customerUrl = _configuration["CustomerServiceUrl"]+ "api/Tenant/QueryTenantId?tenantCode=" + tenantCode;
             _logerr.LogInformation("CustomerServiceUrl:【" + customerUrl + "】");
-            var result = _httpAPIInvoker.InvokeApi(customerUrl + "api/Tenant/QueryTenantId?tenantCode=" + tenantCode);
+            string realUrl = this._abstractConsulDispatcher.MapAddress(customerUrl);
+            var result = _httpAPIInvoker.InvokeApi(realUrl);
             var tenant = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseResult<Guid>>(result);
             if (tenant.IsNullT() || !tenant.IsSuccess)
                 return new ResponseResult() { IsSuccess = false, Message = "租户不存在" };

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Demo.MicroService.Core.ConsulExtend.DispatcherExtend;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -32,6 +33,29 @@ namespace Demo.MicroService.Core.ConsulExtend
             services.AddTransient<IConsulRegister, ConsulRegister>();//完成IOC注册
             services.Configure<ConsulClientOptions>(configuration.GetSection(ConsulClientOptions.ConsulClientOption));
             services.Configure<ConsulRegisterOptions>(configuration.GetSection(ConsulRegisterOptions.ConsulRegisterOption));
+        }
+
+        /// <summary>
+        /// 注册Consul调度策略
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="consulDispatcherType"></param>
+        public static void AddConsulDispatcher(this IServiceCollection services, ConsulDispatcherType consulDispatcherType)
+        {
+            switch (consulDispatcherType)
+            {
+                case ConsulDispatcherType.Average:
+                    services.AddTransient<AbstractConsulDispatcher, AverageDispatcher>();
+                    break;
+                case ConsulDispatcherType.Polling:
+                    services.AddTransient<AbstractConsulDispatcher, PollingDispatcher>();
+                    break;
+                case ConsulDispatcherType.Weight:
+                    services.AddTransient<AbstractConsulDispatcher, WeightDispatcher>();
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

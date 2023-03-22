@@ -88,6 +88,7 @@ builder.Services.AddHttpInvoker(options =>
 
 #region consul
 builder.Services.AddConsulRegister(builder.Configuration);
+builder.Services.AddConsulDispatcher(ConsulDispatcherType.Polling);
 #endregion
 
 
