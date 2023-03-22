@@ -68,8 +68,8 @@ namespace Demo.MicroService.BusinessDomain.Services.Tenant.System
         public async Task<ResponseResult> QuerySysUser(string name, string password, string tenantCode)
         {
             var customerUrl = _configuration["CustomerServiceUrl"]+ "api/Tenant/QueryTenantId?tenantCode=" + tenantCode;
-            _logerr.LogInformation("CustomerServiceUrl:【" + customerUrl + "】");
             string realUrl = this._abstractConsulDispatcher.MapAddress(customerUrl);
+            _logerr.LogInformation("realUrl:【" + realUrl + "】");
             var result = _httpAPIInvoker.InvokeApi(realUrl);
             var tenant = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseResult<Guid>>(result);
             if (tenant.IsNullT() || !tenant.IsSuccess)
