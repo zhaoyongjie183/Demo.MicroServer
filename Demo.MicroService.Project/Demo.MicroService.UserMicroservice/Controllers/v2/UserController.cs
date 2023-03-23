@@ -13,6 +13,7 @@ using Omu.ValueInjecter;
 using Serilog.Context;
 using SkyApm.Tracing;
 using SkyApm.Tracing.Segments;
+using System.Diagnostics;
 using System.Web;
 
 namespace Demo.MicroService.UserMicroservice.Controllers.v2
@@ -28,16 +29,18 @@ namespace Demo.MicroService.UserMicroservice.Controllers.v2
         private readonly ITSysUserService _tSysUserService;
         private readonly ILogger<UserController> _logger;
         private readonly IEntrySegmentContextAccessor _segContext;
+        private readonly Nacos.V2.INacosNamingService _svc;
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="tSysUserService"></param>
         /// <param name="logger"></param>
-        public UserController(ITSysUserService tSysUserService, ILogger<UserController> logger, IEntrySegmentContextAccessor segContext)
+        public UserController(ITSysUserService tSysUserService, ILogger<UserController> logger, IEntrySegmentContextAccessor segContext, Nacos.V2.INacosNamingService svc)
         {
             _tSysUserService = tSysUserService;
             _logger = logger;
             _segContext = segContext;
+            _svc = svc;
         }
 
         /// <summary>
@@ -79,7 +82,7 @@ namespace Demo.MicroService.UserMicroservice.Controllers.v2
         [HttpGet]
         [Authorize]
 
-        public async Task<PageResult<TSysUser>> PageQueryUser(int pageIndex = 1,int pageSize=10)
+        public async Task<PageResult<TSysUser>> PageQueryUser(int pageIndex = 1, int pageSize = 10)
         {
             return await _tSysUserService.PageQueryUser(pageIndex, pageSize);
         }
@@ -94,7 +97,7 @@ namespace Demo.MicroService.UserMicroservice.Controllers.v2
 
         public async Task<ResponseResult<List<TSysUser>>> QueryUser()
         {
-            return await _tSysUserService.QueryUser(); 
+            return await _tSysUserService.QueryUser();
         }
 
         /// <summary>
@@ -117,12 +120,12 @@ namespace Demo.MicroService.UserMicroservice.Controllers.v2
         [Authorize]
         public async Task<IActionResult> ExportSysUser()
         {
-            var result= await _tSysUserService.QueryUser();
+            var result = await _tSysUserService.QueryUser();
             if (result.IsNullT() || result.DataResult.IsNullT())
                 return new JsonResult(new ResponseResult() { IsSuccess = false, Message = "导出失败" });
             _logger.LogInformation("客户数据【" + JsonHelper.ObjectToJSON(result.DataResult) + "】");
             var buffer = NpoiUtil.Export(result.DataResult);
-             return File(buffer, "application/octet-stream", DateTime.Now.ToString() + "-" + HttpUtility.UrlEncode("客户") + ".xlsx");
+            return File(buffer, "application/octet-stream", DateTime.Now.ToString() + "-" + HttpUtility.UrlEncode("客户") + ".xlsx");
         }
 
         /// <summary>
@@ -130,7 +133,7 @@ namespace Demo.MicroService.UserMicroservice.Controllers.v2
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-       // [Authorize]
+        // [Authorize]
         public async Task<IActionResult> ImportSysUser(IFormFile file)
         {
             if (file == null || file.Length <= 0)
@@ -147,7 +150,7 @@ namespace Demo.MicroService.UserMicroservice.Controllers.v2
                 var dt = NpoiUtil.Import(st, fileExt);
                 return new JsonResult(new ResponseResult() { IsSuccess = true, Message = JsonHelper.DataTableToJSON(dt) });
             }
-            
+
         }
         /// <summary>
         /// 查询用户信息
@@ -157,7 +160,7 @@ namespace Demo.MicroService.UserMicroservice.Controllers.v2
         /// <param name="tenantCode"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ResponseResult> QuerySysUser(string name,string password,string tenantCode)
+        public async Task<ResponseResult> QuerySysUser(string name, string password, string tenantCode)
         {
             return await _tSysUserService.QuerySysUser(name, password, tenantCode);
         }
@@ -168,7 +171,7 @@ namespace Demo.MicroService.UserMicroservice.Controllers.v2
         //[Authorize]
         public async Task<ResponseResult> GetName()
         {
-            return await Task.FromResult(new ResponseResult() { Message="请求成功" });
+            return await Task.FromResult(new ResponseResult() { Message = "请求成功" });
         }
 
         /// <summary>
@@ -188,7 +191,7 @@ namespace Demo.MicroService.UserMicroservice.Controllers.v2
         [HttpGet("traceId")]
         public async Task<ResponseResult> GetSkywalkingTraceId()
         {
-            return await Task.FromResult<ResponseResult>(new ResponseResult() { Value= _segContext.Context.TraceId }); 
+            return await Task.FromResult<ResponseResult>(new ResponseResult() { Value = _segContext.Context.TraceId });
         }
 
         /// <summary>
@@ -207,7 +210,42 @@ namespace Demo.MicroService.UserMicroservice.Controllers.v2
 
             _segContext.Context.Span.AddLog(LogEvent.Message($"SkywalkingTest1---Worker running at--end: {DateTime.Now}"));
 
-            return await Task.FromResult<ResponseResult>(new ResponseResult() { Message = $" Ok,SkywalkingTest1-TraceId={TraceId}" }); 
+            return await Task.FromResult<ResponseResult>(new ResponseResult() { Message = $" Ok,SkywalkingTest1-TraceId={TraceId}" });
+        }
+
+        /// <summary>
+        /// 测试nacos
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ResponseResult> TestNacos()
+        {
+            // 这里需要知道被调用方的服务名
+            var instance = await _svc.SelectOneHealthyInstance("UserMicroservice", "DEFAULT_GROUP");
+            var customerInstance = await _svc.SelectOneHealthyInstance("CustomerMicroservice", "DEFAULT_GROUP");
+            //多服务地址
+            var ins = await _svc.SelectInstances("UserMicroservice", "DEFAULT_GROUP",true);
+            var host = $"{customerInstance.Ip}:{customerInstance.Port}";
+
+            var baseUrl = customerInstance.Metadata.TryGetValue("secure", out _)
+                ? $"https://{host}"
+                : $"http://{host}";
+
+            if (string.IsNullOrWhiteSpace(baseUrl))
+            {
+                return await Task.FromResult<ResponseResult>(new ResponseResult() { Message = $" baseurl为空" });
+            }
+
+            var url = $"{baseUrl}/api/Tenant/Test";
+
+            await Console.Out.WriteLineAsync( "url:"+url);
+
+            using (HttpClient client = new HttpClient())
+            {
+                var result = await client.GetAsync(url);
+                var mess= await result.Content.ReadAsStringAsync();
+                return new ResponseResult() { Message = mess };
+            }
         }
     }
 }

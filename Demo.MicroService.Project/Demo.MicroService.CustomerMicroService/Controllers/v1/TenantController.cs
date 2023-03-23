@@ -5,6 +5,7 @@ using Demo.MicroService.Core.Model;
 using Demo.MicroService.Core.ValInject;
 using Microsoft.AspNetCore.Mvc;
 using Omu.ValueInjecter;
+using System.Diagnostics;
 
 namespace Demo.MicroService.CustomerMicroService.Controllers.v1
 {
@@ -78,6 +79,17 @@ namespace Demo.MicroService.CustomerMicroService.Controllers.v1
         public async Task<ResponseResult> QueryTenantConneString(Guid tenantId)
         {
             return await _mangeTenantService.QueryTenantConneString(tenantId);
+        }
+
+        /// <summary>
+        /// 测试返回
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ResponseResult> Test()
+        {
+            return await Task.FromResult<ResponseResult>(new ResponseResult() { Message = $" 哈哈哈哈test" });
         }
     }
 }
