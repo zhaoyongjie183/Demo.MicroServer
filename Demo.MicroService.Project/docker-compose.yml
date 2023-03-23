@@ -1,10 +1,16 @@
-version: '3.3'
+version: '2'
+
 services:
   customermicroserviceapi:
     build:
       context: /dotnetpublish/DemoMicroServiceProject/
       dockerfile: /dotnetpublish/DemoMicroServiceProject/Demo.MicroService.CustomerMicroService/Dockerfile
     image: customermicroserviceapi.v0315
+    environment:
+     - ASPNETCORE_HOSTINGSTARTUPASSEMBLIES=SkyAPM.Agent.AspNetCore
+     - SKYWALKING__SERVICENAME=SkyWalking_CustomerService
+    volumes:
+       - /dotnetpublish/logs/customermicroserviceapi:/app/logs
     ports:
       - 5100:80/tcp
     container_name: "customermicroserviceapi"
@@ -14,6 +20,11 @@ services:
       context: /dotnetpublish/DemoMicroServiceProject/
       dockerfile: /dotnetpublish/DemoMicroServiceProject/Demo.MicroService.UserMicroservice/Dockerfile
     image: usermicroserviceapi.v0315
+    environment:
+     - ASPNETCORE_HOSTINGSTARTUPASSEMBLIES=SkyAPM.Agent.AspNetCore
+     - SKYWALKING__SERVICENAME=SkyWalking_UserService
+    volumes:
+       - /dotnetpublish/logs/usermicroserviceapi:/app/logs
     ports:
       - 5200:80/tcp
     container_name: "usermicroserviceapi"
@@ -23,6 +34,11 @@ services:
       context: /dotnetpublish/DemoMicroServiceProject/
       dockerfile: /dotnetpublish/DemoMicroServiceProject/Demo.MicroService.ProjectMicroService/Dockerfile
     image: projectmicroserviceapi.v0315
+    environment:
+     - ASPNETCORE_HOSTINGSTARTUPASSEMBLIES=SkyAPM.Agent.AspNetCore
+     - SKYWALKING__SERVICENAME=SkyWalking_ProjectService
+    volumes:
+       - /dotnetpublish/logs/projectmicroserviceapi:/app/logs
     ports:
       - 5300:80/tcp
     container_name: "projectmicroserviceapi"
@@ -32,6 +48,8 @@ services:
       context: /dotnetpublish/DemoMicroServiceProject/
       dockerfile: /dotnetpublish/DemoMicroServiceProject/Demo.MicroService.AuthenticationCenter/Dockerfile
     image: authenticationcenter.v0315
+    volumes:
+       - /dotnetpublish/logs/authenticationcenter:/app/logs
     ports:
       - 7200:80/tcp
     container_name: "authenticationcenter"
@@ -41,7 +59,12 @@ services:
       context: /dotnetpublish/DemoMicroServiceProject/
       dockerfile: /dotnetpublish/DemoMicroServiceProject/Demo.MicroService.GatewayCenter/Dockerfile
     image: gatewayapi.v0315
+    environment:
+     - ASPNETCORE_HOSTINGSTARTUPASSEMBLIES=SkyAPM.Agent.AspNetCore
+     - SKYWALKING__SERVICENAME=SkyWalking_Gateway
+    volumes:
+       - /dotnetpublish/logs/gatewayapi:/app/logs
     ports:
-      - 7200:80/tcp
+      - 6299:80/tcp
     container_name: "gatewayapi"
     command: "dotnet /app/Demo.MicroService.GatewayCenter.dll"
