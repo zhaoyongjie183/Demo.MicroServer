@@ -19,7 +19,8 @@ namespace Demo.MicroService.Core
     {
         protected override async void Convert(TextWriter writer, object state)
         {
-            await writer.WriteAsync(Dns.GetHostName());
+            var hostname = (string)state;
+            await writer.WriteAsync(hostname);
         }
     }
 }
