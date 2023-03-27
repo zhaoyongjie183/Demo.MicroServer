@@ -9,6 +9,7 @@ using Demo.MicroService.Core.ValInject;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Omu.ValueInjecter;
 using Serilog.Context;
 using SkyApm.Tracing;
@@ -30,17 +31,19 @@ namespace Demo.MicroService.UserMicroservice.Controllers.v2
         private readonly ILogger<UserController> _logger;
         private readonly IEntrySegmentContextAccessor _segContext;
         private readonly Nacos.V2.INacosNamingService _svc;
+        private readonly IStringLocalizer<Language> _stringLocalizer;
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="tSysUserService"></param>
         /// <param name="logger"></param>
-        public UserController(ITSysUserService tSysUserService, ILogger<UserController> logger, IEntrySegmentContextAccessor segContext, Nacos.V2.INacosNamingService svc)
+        public UserController(ITSysUserService tSysUserService, ILogger<UserController> logger, IEntrySegmentContextAccessor segContext, Nacos.V2.INacosNamingService svc, IStringLocalizer<Language> stringLocalizer)
         {
             _tSysUserService = tSysUserService;
             _logger = logger;
             _segContext = segContext;
             _svc = svc;
+            _stringLocalizer = stringLocalizer;
         }
 
         /// <summary>
@@ -162,6 +165,7 @@ namespace Demo.MicroService.UserMicroservice.Controllers.v2
         [HttpGet]
         public async Task<ResponseResult> QuerySysUser(string name, string password, string tenantCode)
         {
+            var datt=TimeZoneInfo.ConvertTime(DateTime.Now,  TimeZoneInfo.FindSystemTimeZoneById("China Standard Time"), TimeZoneInfo.FindSystemTimeZoneById("Korea Standard Time"));
             return await _tSysUserService.QuerySysUser(name, password, tenantCode);
         }
 
@@ -246,6 +250,19 @@ namespace Demo.MicroService.UserMicroservice.Controllers.v2
                 var mess= await result.Content.ReadAsStringAsync();
                 return new ResponseResult() { Message = mess };
             }
+        }
+
+        /// <summary>
+        /// 多语言版本
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="password"></param>
+        /// <param name="tenantCode"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ResponseResult> Language()
+        {
+            return await Task.FromResult(new ResponseResult() { Message = _stringLocalizer.GetString("Name").Value });
         }
     }
 }

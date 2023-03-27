@@ -19,6 +19,8 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Nacos.V2.Naming.Dtos;
 using SkyApm.Utilities.DependencyInjection;
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +32,15 @@ builder.Services.AddScoped(typeof(IBaseServices), typeof(BaseServices));
 builder.Services.AddScoped<IUser, AspNetUser>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+#region 多语言版本
+// 添加JSON多语言
+builder.Services.AddJsonLocalization(options =>
+{
+    options.ResourcesPath = "Resources";
+});
+#endregion
+
+
 #region Nacos配置
 // 注册服务到Nacos
 builder.Services.AddNacosAspNet(builder.Configuration, section: "NacosConfig"); //默认节点Nacos
@@ -40,6 +51,7 @@ builder.Configuration.AddNacosV2Configuration(builder.Configuration.GetSection("
 #region Skywalking配置
 builder.Services.AddSkyApmExtensions();
 #endregion
+
 #region jwt校验  HS
 JWTTokenOptions tokenOptions = new JWTTokenOptions();
 builder.Configuration.Bind(JWTTokenOptions.JWTTokenOption, tokenOptions);
@@ -126,7 +138,18 @@ app.UseHealthCheckMiddleware("/Api/Health/Index");//心跳请求响应
 app.Services.GetService<IConsulRegister>()!.UseConsulRegist();
 #endregion
 //app.UseExceptionHandlerMiddleware();
-
+// 中英文支持
+var supportedCultures = new List<CultureInfo>
+            {
+                new CultureInfo("en-US"),
+                new CultureInfo("zh-CN"),
+            };
+app.UseRequestLocalization(new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture("zh-CN"),
+    SupportedCultures = supportedCultures,
+    SupportedUICultures = supportedCultures
+});
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
