@@ -262,7 +262,9 @@ namespace Demo.MicroService.UserMicroservice.Controllers.v2
         [HttpGet]
         public async Task<ResponseResult> Language()
         {
-            return await Task.FromResult(new ResponseResult() { Message = _stringLocalizer.GetString("Name").Value });
+            DateTimeOffset dateTimeOffset = new DateTimeOffset(DateTime.Parse("2019-07-15 08:30:00"), TimeSpan.Zero);
+
+            return await Task.FromResult(new ResponseResult() { Message = _stringLocalizer.GetString("Name").Value+"；"+ dateTimeOffset });
         }
     }
 }

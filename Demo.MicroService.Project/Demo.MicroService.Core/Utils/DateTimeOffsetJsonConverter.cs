@@ -22,12 +22,12 @@ namespace Demo.MicroService.Core.Utils
 {
     public class DateTimeOffsetJsonConverter : JsonConverter<DateTimeOffset>
     {
-        private TimeZoneInfo chinaZoneInfo = TimeZoneInfo.CreateCustomTimeZone("zh", TimeSpan.FromHours(8), "中国时区", "China time zone");
-        private TimeZoneInfo indiaZoneInfo = TimeZoneInfo.CreateCustomTimeZone("en-IN", TimeSpan.FromHours(5), "印度时区", "India time zone");
+        private TimeZoneInfo chinaZoneInfo = TimeZoneInfo.CreateCustomTimeZone("zh-CN", TimeSpan.FromHours(8), "中国时区", "China time zone");
+        private TimeZoneInfo indiaZoneInfo = TimeZoneInfo.CreateCustomTimeZone("en-US", TimeSpan.FromHours(5), "印度时区", "India time zone");
 
         public override DateTimeOffset Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            var currentZoneInfo = Thread.CurrentThread.CurrentCulture.Name.Contains("zh") ? chinaZoneInfo : indiaZoneInfo;
+            var currentZoneInfo = Thread.CurrentThread.CurrentCulture.Name.Contains("zh-CN") ? chinaZoneInfo : indiaZoneInfo;
             var time1 = new DateTimeOffset(DateTime.Parse(reader.GetString()), currentZoneInfo.BaseUtcOffset);
             var time2 = time1.ToUniversalTime();
 
@@ -36,7 +36,7 @@ namespace Demo.MicroService.Core.Utils
 
         public override void Write(Utf8JsonWriter writer, DateTimeOffset value, JsonSerializerOptions options)
         {
-            var currentZoneInfo = Thread.CurrentThread.CurrentCulture.Name.Contains("zh") ? chinaZoneInfo : indiaZoneInfo;
+            var currentZoneInfo = Thread.CurrentThread.CurrentCulture.Name.Contains("zh-CN") ? chinaZoneInfo : indiaZoneInfo;
             writer.WriteStringValue(value.ToOffset(currentZoneInfo.BaseUtcOffset).ToString("yyyy-MM-dd HH:mm:ss"));
         }
     }
