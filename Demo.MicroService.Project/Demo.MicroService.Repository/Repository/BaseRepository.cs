@@ -225,6 +225,7 @@ namespace Demo.MicroService.Repository.Repository
 
         #endregion update
 
+        #region Tran
         public DbResult<bool> UseTran(Action action)
         {
             var result = _db.Ado.UseTran(() => action());
@@ -242,6 +243,7 @@ namespace Demo.MicroService.Repository.Repository
             var result = _db.Ado.UseTran(() => action());
             return result.IsSuccess;
         }
+        #endregion
 
         #region delete
 
@@ -367,6 +369,7 @@ namespace Demo.MicroService.Repository.Repository
 
         #endregion query
 
+        #region Procedure
         /// <summary>
         /// 此方法不带output返回值
         /// var list = new List<SugarParameter>();
@@ -394,6 +397,8 @@ namespace Demo.MicroService.Repository.Repository
             var result = (_db.Ado.UseStoredProcedure().GetDataTable(procedureName, parameters), parameters);
             return result;
         }
+
+        #endregion 
 
         #region Async Method
         public virtual Task<T> GetByIdAsync(dynamic id)
