@@ -30,9 +30,8 @@ builder.Services.AddSkyApmExtensions();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
 #region swagger
-builder.AddSwaggerGenExt();
+builder.Services.AddSwaggerGenExt();
 #endregion
 #region Orm
 var sqlSugarConfig = SqlSugarConfig.GetConnectionString(builder.Configuration);

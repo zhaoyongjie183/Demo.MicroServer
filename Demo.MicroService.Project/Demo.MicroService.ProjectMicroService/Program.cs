@@ -36,7 +36,7 @@ builder.Configuration.AddNacosV2Configuration(builder.Configuration.GetSection("
 #endregion
 
 #region swagger
-builder.AddSwaggerGenExt();
+builder.Services.AddSwaggerGenExt();
 #endregion
 
 #region Orm

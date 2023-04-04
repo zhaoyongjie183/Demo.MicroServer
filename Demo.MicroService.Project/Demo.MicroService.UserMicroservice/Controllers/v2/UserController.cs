@@ -150,7 +150,7 @@ namespace Demo.MicroService.UserMicroservice.Controllers.v2
             using (var st = new MemoryStream())
             {
                 file.CopyTo(st);
-                var dt = NpoiUtil.Import(st, fileExt);
+                var dt = NpoiUtil.Import(st, filepath);
                 return new JsonResult(new ResponseResult() { IsSuccess = true, Message = JsonHelper.DataTableToJSON(dt) });
             }
 
@@ -165,7 +165,7 @@ namespace Demo.MicroService.UserMicroservice.Controllers.v2
         [HttpGet]
         public async Task<ResponseResult> QuerySysUser(string name, string password, string tenantCode)
         {
-            var datt=TimeZoneInfo.ConvertTime(DateTime.Now,  TimeZoneInfo.FindSystemTimeZoneById("China Standard Time"), TimeZoneInfo.FindSystemTimeZoneById("Korea Standard Time"));
+            //var datt=TimeZoneInfo.ConvertTime(DateTime.Now,  TimeZoneInfo.FindSystemTimeZoneById("China Standard Time"), TimeZoneInfo.FindSystemTimeZoneById("Korea Standard Time"));
             return await _tSysUserService.QuerySysUser(name, password, tenantCode);
         }
 

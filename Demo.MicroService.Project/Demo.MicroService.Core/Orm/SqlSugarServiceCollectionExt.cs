@@ -134,76 +134,7 @@ namespace Demo.MicroService.Core.Orm
                     break;
 
                 case ServiceLifetime.Scoped:
-
-                    services.AddScoped(serviceProvider =>
-                    {
-                        var configS = new ConnectionConfig()
-                        {
-                            ConfigureExternalServices = new ConfigureExternalServices
-                            {
-                                SqlFuncServices = SqlSugarConfig.GetLambda(),
-                                EntityService = (property, column) =>
-                                {
-                                    var attributes = property.GetCustomAttributes(true);//get all attributes 
-
-                                    if (attributes.Any(it => it is KeyAttribute))// by attribute set primarykey
-                                    {
-                                        column.IsPrimarykey = true; 
-                                    }
-                                },
-                                EntityNameService = (type, entity) =>
-                                {
-                                    var attributes = type.GetCustomAttributes(true);
-                                    if (attributes.Any(it => it is TableAttribute))
-                                    {
-                                        entity.DbTableName = (attributes.First(it => it is TableAttribute) as TableAttribute).Name;
-                                    }
-                                }
-                            }
-                        };
-                        configAction.Invoke(configS);
-                        var db = new SqlSugarClient(configS);
-                        var log = serviceProvider.GetRequiredService<ILogger<T>>();
-                        var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-                        string flag = configuration["Log:sqllog"];
-                        if (string.IsNullOrWhiteSpace(flag))
-                        {
-                            flag = "false";
-                        }
-                        if (flag.Equals("true", StringComparison.OrdinalIgnoreCase))
-                        {
-                            db.Ado.IsEnableLogEvent = true;
-                            //SQL执行前事件
-                            db.Aop.OnLogExecuting = (sql, pars) =>
-                            {
-                                foreach (var item in pars)
-                                {
-                                    sql = sql.Replace(item.ParameterName.ToString(), $"'{item.Value?.ToString()}'");
-                                }
-                                log.LogInformation($"执行前SQL: {sql}");
-                                //log.Info(db.Utilities.SerializeObject(pars.ToDictionary(it => it.ParameterName, it => it.Value)));
-                            };
-                            //SQL执行完事件
-                            db.Aop.OnLogExecuted = (sql, pars) =>
-                            {
-                                foreach (var item in pars)
-                                {
-                                    sql = sql.Replace(item.ParameterName.ToString(), $"'{item.Value?.ToString()}'");
-                                }
-                                log.LogInformation($"执行后SQL: {sql}");
-                            };
-                            db.Aop.OnError = (exp) =>//执行SQL 错误事件
-                            {
-                                log.LogDebug(exp, exp.Sql);
-                            };
-                        }
-                        else
-                        {
-                            db.Ado.IsEnableLogEvent = false;
-                        }
-
-                        return (T)db;
-                    });
+                    services.AddScoped(serviceProvider => ImplementationFactory<T>(serviceProvider, configAction) );
                     break;
 
                 case ServiceLifetime.Transient:

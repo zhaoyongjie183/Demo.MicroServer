@@ -75,7 +75,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 builder.Services.AddControllers();
 
 #region swagger
-builder.AddSwaggerGenExt();
+builder.Services.AddSwaggerGenExt();
 #endregion
 
 

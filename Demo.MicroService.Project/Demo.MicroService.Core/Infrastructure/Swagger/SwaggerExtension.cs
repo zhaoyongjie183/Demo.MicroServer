@@ -29,11 +29,11 @@ namespace Demo.MicroService.Core.Infrastructure.Swagger
         /// Swagger注册方法
         /// </summary>
         /// <param name="builder"></param>
-        public static void AddSwaggerGenExt(this WebApplicationBuilder builder)
+        public static void AddSwaggerGenExt(this IServiceCollection services)
         {
-            builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, SwaggerConfigureOptions>();
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen(options =>
+            services.AddTransient<IConfigureOptions<SwaggerGenOptions>, SwaggerConfigureOptions>();
+            services.AddEndpointsApiExplorer();
+            services.AddSwaggerGen(options =>
             {
 
                 options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetEntryAssembly().GetName().Name}.xml"), true);
@@ -65,7 +65,7 @@ namespace Demo.MicroService.Core.Infrastructure.Swagger
                     }
                 });
             });
-            builder.Services.AddApiVersioning(options =>
+            services.AddApiVersioning(options =>
             {
                 //通过Header向客户端通报支持的版本
                 options.ReportApiVersions = true;
@@ -87,7 +87,7 @@ namespace Demo.MicroService.Core.Infrastructure.Swagger
 
             });
 
-            builder.Services.AddVersionedApiExplorer(options =>
+            services.AddVersionedApiExplorer(options =>
             {
                 options.GroupNameFormat = "'v'VVV";
                 options.SubstituteApiVersionInUrl = true;
