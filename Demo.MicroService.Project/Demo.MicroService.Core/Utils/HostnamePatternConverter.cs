@@ -13,7 +13,7 @@ using System.Net;
 *│　类    名： HostnamePatternConverter                                      
 *└──────────────────────────────────────────────────────────────┘
 */
-namespace Demo.MicroService.Core
+namespace Demo.MicroService.Core.Utils
 {
     public class HostnamePatternConverter : PatternConverter
     {

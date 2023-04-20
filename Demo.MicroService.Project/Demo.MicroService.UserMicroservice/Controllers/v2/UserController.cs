@@ -2,6 +2,7 @@
 using Demo.MicroService.BusinessModel.DTO.Tenant.System;
 using Demo.MicroService.BusinessModel.Model.Tenant.System;
 using Demo.MicroService.Core.Application;
+using Demo.MicroService.Core.HttpApiExtend;
 using Demo.MicroService.Core.Model;
 using Demo.MicroService.Core.Utils;
 using Demo.MicroService.Core.Utils.Excel;
@@ -32,18 +33,20 @@ namespace Demo.MicroService.UserMicroservice.Controllers.v2
         private readonly IEntrySegmentContextAccessor _segContext;
         private readonly Nacos.V2.INacosNamingService _svc;
         private readonly IStringLocalizer<Language> _stringLocalizer;
+        private readonly IHttpPollyHelper _httpPollyHelper;
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="tSysUserService"></param>
         /// <param name="logger"></param>
-        public UserController(ITSysUserService tSysUserService, ILogger<UserController> logger, IEntrySegmentContextAccessor segContext, Nacos.V2.INacosNamingService svc, IStringLocalizer<Language> stringLocalizer)
+        public UserController(ITSysUserService tSysUserService, ILogger<UserController> logger, IEntrySegmentContextAccessor segContext, Nacos.V2.INacosNamingService svc, IStringLocalizer<Language> stringLocalizer, IHttpPollyHelper httpPollyHelper)
         {
             _tSysUserService = tSysUserService;
             _logger = logger;
             _segContext = segContext;
             _svc = svc;
             _stringLocalizer = stringLocalizer;
+            _httpPollyHelper = httpPollyHelper;
         }
 
         /// <summary>
@@ -266,5 +269,29 @@ namespace Demo.MicroService.UserMicroservice.Controllers.v2
 
             return await Task.FromResult(new ResponseResult() { Message = _stringLocalizer.GetString("Name").Value+"；"+ dateTimeOffset });
         }
+
+        #region HttpPolly
+
+        /// <summary>
+        /// 测试polly的post请求
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<string> HttpPollyPost()
+        {
+            var response = await _httpPollyHelper.PostAsync(HttpEnum.LocalHost, "/api/Test", "{\"from\": 0,\"size\": 10,\"word\": \"非那雄安\"}");
+
+            return response;
+        }
+        /// <summary>
+        /// 测试polly的get请求
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<string> HttpPollyGet()
+        {
+            return await _httpPollyHelper.GetAsync(HttpEnum.LocalHost, "/api/GetDetailInfo?esid=3130&esindex=chinacodex");
+        }
+        #endregion
     }
 }

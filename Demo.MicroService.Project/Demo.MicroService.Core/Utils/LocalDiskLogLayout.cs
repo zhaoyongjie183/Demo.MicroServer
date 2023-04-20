@@ -17,7 +17,7 @@ using System.Net;
 *│　类    名： LocalDiskLogLayout                                      
 *└──────────────────────────────────────────────────────────────┘
 */
-namespace Demo.MicroService.Core
+namespace Demo.MicroService.Core.Utils
 {
     public class LocalDiskLogLayout : PatternLayout
     {

@@ -21,9 +21,11 @@ builder.Services.AddNacosAspNet(builder.Configuration, section: "NacosConfig"); 
 //builder.Host.UseNacosConfig(section: "NacosConfig");
 builder.Configuration.AddNacosV2Configuration(builder.Configuration.GetSection("NacosConfig"));
 #endregion
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 #region Skywalking≈‰÷√
-builder.Services.AddSkyApmExtensions();
+//builder.Services.AddSkyApmExtensions();
 #endregion
 
 #region Ocelot≈‰÷√
@@ -63,8 +65,8 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    //app.UseSwagger();
-    //app.UseSwaggerUI();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 app.UseOcelot();
 //app.UseHttpsRedirection();

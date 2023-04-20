@@ -5,11 +5,12 @@
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "SkyAPM.Agent.AspNetCore", // 必须配置
-        "SKYWALKING__SERVICENAME": "SkyWalking_Gateway" // 必须配置，在skywalking做标识
+        "ASPNETCORE_ENVIRONMENT": "Development"
+        //"ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "SkyAPM.Agent.AspNetCore", // 必须配置
+        //"SKYWALKING__SERVICENAME": "SkyWalking_Gateway" // 必须配置，在skywalking做标识
       },
-      "dotnetRunMessages": true
+      "dotnetRunMessages": true,
+      "applicationUrl": "http://localhost:5000"
     },
     
     "Docker": {

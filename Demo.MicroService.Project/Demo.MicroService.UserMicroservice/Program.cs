@@ -31,7 +31,7 @@ builder.Services.AddScoped(typeof(ITenantBaseRepository<>), typeof(TenantBaseRep
 builder.Services.AddScoped(typeof(IBaseServices), typeof(BaseServices));
 builder.Services.AddScoped<IUser, AspNetUser>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
+builder.Services.AddHttpPollySetup();
 #region 多语言版本
 // 添加JSON多语言
 builder.Services.AddJsonLocalization(options =>
