@@ -222,10 +222,11 @@ namespace Demo.MicroService.Core.HttpApiExtend
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    return await response.Content.ReadAsStringAsync(); ;
+                    return await response.Content.ReadAsStringAsync(); 
                 }
                 else
                 {
+                    await Console.Out.WriteLineAsync( "返回结果===="+JsonConvert.SerializeObject(response));
                     throw new Exception($"Http Error StatusCode:{response.StatusCode}");
                 }
 

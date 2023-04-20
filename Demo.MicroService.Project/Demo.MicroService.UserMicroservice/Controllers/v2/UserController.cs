@@ -279,7 +279,7 @@ namespace Demo.MicroService.UserMicroservice.Controllers.v2
         [HttpPost]
         public async Task<string> HttpPollyPost()
         {
-            var response = await _httpPollyHelper.PostAsync(HttpEnum.LocalHost, "/api/Test", "{\"from\": 0,\"size\": 10,\"word\": \"非那雄安\"}");
+            var response = await _httpPollyHelper.PostAsync(HttpEnum.LocalHost, "http://localhost:5726/api/Tenant/Test", "{\"from\": 0,\"size\": 10,\"word\": \"非那雄安\"}");
 
             return response;
         }
@@ -290,7 +290,7 @@ namespace Demo.MicroService.UserMicroservice.Controllers.v2
         [HttpGet]
         public async Task<string> HttpPollyGet()
         {
-            return await _httpPollyHelper.GetAsync(HttpEnum.LocalHost, "/api/GetDetailInfo?esid=3130&esindex=chinacodex");
+            return await _httpPollyHelper.GetAsync(HttpEnum.LocalHost, "http://localhost:5726/api/Tenant/Test");
         }
         #endregion
     }

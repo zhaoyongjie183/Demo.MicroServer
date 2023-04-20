@@ -89,6 +89,7 @@ namespace Demo.MicroService.CustomerMicroService.Controllers.v1
         [HttpGet]
         public async Task<ResponseResult> Test()
         {
+            Thread.Sleep(8000);
             return await Task.FromResult<ResponseResult>(new ResponseResult() { Message = $" 哈哈哈哈test" });
         }
     }
